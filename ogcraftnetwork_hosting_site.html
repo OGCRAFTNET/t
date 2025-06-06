@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OGCRAFTNETWORK Hosting</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: rgba(10, 10, 10, 0.95);
+      --card-color: rgba(25, 25, 25, 0.8);
+      --accent-green: #39ff14;
+      --accent-yellow: #ffe600;
+      --accent-blue: #00c8ff;
+      --text-color: #f0f0f0;
+      --glass: blur(10px);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 2rem;
+      text-align: center;
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-yellow), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px var(--accent-blue);
+    }
+
+    .timer {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .plans {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 2rem;
+    }
+
+    .plan {
+      background: var(--card-color);
+      backdrop-filter: var(--glass);
+      padding: 2rem;
+      border-radius: 20px;
+      width: 250px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 25px var(--accent-blue);
+    }
+
+    .plan:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px var(--accent-yellow);
+    }
+
+    .plan h2 {
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-yellow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .plan button {
+      margin-top: 1rem;
+      background: var(--accent-green);
+      color: black;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .plan button:hover {
+      background: var(--accent-yellow);
+      transform: scale(1.1);
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 10%;
+      right: 10%;
+      background: var(--card-color);
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      backdrop-filter: var(--glass);
+      box-shadow: 0 0 20px var(--accent-green);
+      animation: slideUp 1s ease;
+      display: none;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .about {
+      text-align: center;
+      max-width: 800px;
+      margin: 4rem auto;
+      padding: 2rem;
+      border-radius: 20px;
+      background: var(--card-color);
+      backdrop-filter: var(--glass);
+      box-shadow: 0 0 25px var(--accent-blue);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding: 2rem;
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    OGCRAFTNETWORK Hosting
+    <div class="timer" id="countdown"></div>
+  </header>
+
+  <section class="plans">
+    <div class="plan">
+      <h2>6GB RAM</h2>
+      <p>1 vCore</p>
+      <p>6€/month</p>
+      <button onclick="showPopup()">Get</button>
+    </div>
+    <div class="plan">
+      <h2>12GB RAM</h2>
+      <p>2 vCores</p>
+      <p>12€/month</p>
+      <button onclick="showPopup()">Get</button>
+    </div>
+  </section>
+
+  <div class="popup" id="popup">Server will be available at launch day!</div>
+
+  <section class="about">
+    <h2>About OGCRAFTNETWORK</h2>
+    <p>We are a modern, powerful and affordable Minecraft hosting company. OGCRAFTNETWORK focuses on simplicity, performance and gamer-friendly tools. Launching on July 30, 2026, we're excited to provide blazing fast Minecraft server hosting with glossy, modern UI and great support via our <a href="https://discord.ogcraftnet.vip" target="_blank">Discord</a>.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 OGCRAFTNETWORK. All rights reserved.
+  </footer>
+
+  <script>
+    const launchDate = new Date("2026-07-30T00:00:00").getTime();
+    const countdownEl = document.getElementById("countdown");
+
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = launchDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `Launching in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+
+    function showPopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "block";
+      setTimeout(() => popup.style.display = "none", 5000);
+    }
+  </script>
+</body>
+</html>
