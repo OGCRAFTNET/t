@@ -1,106 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OGCRAFTNETWORK Hosting</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-color: #121212; /* echtes OLED-Schwarz */
-      --card-color: rgba(20, 20, 20, 0.6); /* dunkles milchiges Glas */
-      --accent: #00cfff; /* neon hellblau */
-      --text-color: #e0f7ff; /* leicht helles weiß/blau */
-      --glass: blur(20px);
-      --highlight: #66e0ff;
-    }
+:root {
+  --bg-color: #121212; /* echtes OLED-Schwarz */
+  --card-color: rgba(20, 20, 20, 0.6); /* dunkles milchiges Glas */
+  --accent: #00cfff; /* neon hellblau */
+  --text-color: #e0f7ff; /* leicht helles weiß/blau */
+  --glass: blur(20px);
+  --highlight: #66e0ff;
+}
+
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Outfit", sans-serif;
+      font-family: 'Outfit', sans-serif;
       scroll-behavior: smooth;
     }
 
-    body {
-      background-color: var(--bg-color);
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-family: 'Outfit', sans-serif;
+}
+
+.hero {
+  background: rgba(25, 25, 25, 0.5);
+  backdrop-filter: blur(15px);
+  padding: 8rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--accent);
+  box-shadow: 0 0 50px rgba(0, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeInUp 1.5s ease-out;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.slogan {
+  font-size: 1.2rem;
+  color: #999;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.discord-btn {
+  padding: 0.75rem 1.8rem;
+  background: linear-gradient(135deg, #00ffcc, #00cfff);
+  border-radius: 14px;
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: 0 0 15px #00ffff70;
+  transition: all 0.3s ease;
+}
+
+.discord-btn:hover {
+  background: linear-gradient(135deg, #00ccff, #00ffaa);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #00ffffa0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+    
+header {
+  padding: 1.5rem 2rem;
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: var(--glass);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+  border-radius: 20px;
+  width: calc(100% - 4rem);
+  max-width: 1200px;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  /* Start visible */
+  opacity: 1;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent);
+  margin: 0;
+}
+
+.slogan {
+  font-size: 0.9rem;
+  color: #99cccc;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+nav a.discord-btn {
+  background: var(--accent);
+  color: #000;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 0 20px var(--accent);
+  transition: all 0.3s ease;
+}
+
+nav a.discord-btn:hover {
+  background: var(--highlight);
+  box-shadow: 0 0 30px var(--highlight);
+  transform: scale(1.05);
+}
+
+/* Header verstecken */
+header.hidden {
+  transform: translate(-50%, -150%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Header wieder anzeigen */
+header.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.slogan {
+  font-size: 0.9rem;
+  color: #99cccc;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+nav a.discord-btn {
+  background: var(--accent);
+  color: #000;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 0 20px var(--accent);
+  transition: all 0.3s ease;
+}
+
+nav a.discord-btn:hover {
+  background: var(--highlight);
+  box-shadow: 0 0 30px var(--highlight);
+  transform: scale(1.05);
+}
+
+
+    nav a {
+      margin: 0 1rem;
       color: var(--text-color);
-      overflow-x: hidden;
-      overflow-y: scroll;
-      font-family: "Outfit", sans-serif;
-    }
-
-    header {
-      padding: 1.5rem 2rem;
-      background: rgba(20, 20, 20, 0.6);
-      backdrop-filter: var(--glass);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      border: 1px solid var(--accent);
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-      border-radius: 20px;
-      width: calc(100% - 4rem);
-      max-width: 1200px;
-      transition: transform 0.5s ease, opacity 0.5s ease;
-      opacity: 1;
-    }
-
-    .header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      color: var(--accent);
-      text-shadow: 0 0 10px var(--accent);
-      margin: 0;
-    }
-
-    .slogan {
-      font-size: 0.9rem;
-      color: #99cccc;
-      letter-spacing: 1.5px;
-      font-weight: 600;
-      margin: 0;
-      text-transform: uppercase;
-    }
-
-    nav a.discord-btn {
-      background: var(--accent);
-      color: #000;
-      padding: 0.5rem 1.2rem;
-      border-radius: 12px;
-      font-weight: 600;
       text-decoration: none;
-      box-shadow: 0 0 20px var(--accent);
-      transition: all 0.3s ease;
-      margin-left: 1rem;
-      white-space: nowrap;
+      transition: color 0.3s ease;
     }
 
-    nav a.discord-btn:hover {
-      background: var(--highlight);
-      box-shadow: 0 0 30px var(--highlight);
-      transform: scale(1.05);
+    nav a:hover {
+      color: var(--highlight);
     }
 
     .section {
       padding: 4rem 2rem;
       text-align: center;
-      max-width: 1200px;
-      margin: 0 auto;
     }
 
     .timer {
@@ -114,8 +231,6 @@
       justify-content: center;
       gap: 2rem;
       flex-wrap: wrap;
-      max-width: 1200px;
-      margin: 0 auto;
     }
 
     .plan {
@@ -127,7 +242,6 @@
       text-align: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
-      flex-shrink: 0;
     }
 
     .plan:hover {
@@ -149,8 +263,6 @@
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
-      width: 100%;
-      font-size: 1rem;
     }
 
     .plan button:hover {
@@ -158,29 +270,33 @@
       transform: scale(1.05);
     }
 
-    .popup {
-      position: fixed;
-      left: 50%;
-      bottom: 40px;
-      transform: translateX(-50%) scale(0.9);
-      background: var(--card-color);
-      padding: 1rem 2rem;
-      border-radius: 20px;
-      backdrop-filter: var(--glass);
-      box-shadow: 0 0 25px var(--accent);
-      color: var(--text-color);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.5s ease;
-      z-index: 9999;
-      font-size: 1.1rem;
-      text-align: center;
-      max-width: 90vw;
-      word-wrap: break-word;
+.popup {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) scale(0.9);
+  background: var(--card-color);
+  padding: 1rem 2rem;
+  border-radius: 20px;
+  backdrop-filter: var(--glass);
+  box-shadow: 0 0 25px var(--accent);
+  color: var(--text-color);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s ease;
+  z-index: 9999;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+
+
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    .about,
-    .legal {
+    .about, .legal {
       max-width: 900px;
       margin: 2rem auto;
       background: var(--card-color);
@@ -189,11 +305,9 @@
       backdrop-filter: var(--glass);
       box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
       transition: transform 0.3s ease;
-      text-align: left;
     }
 
-    .about:hover,
-    .legal:hover {
+    .about:hover, .legal:hover {
       transform: scale(1.01);
     }
 
@@ -214,160 +328,135 @@
       text-decoration: underline;
     }
 
-    /* RESPONSIVE STYLES */
-    @media (max-width: 900px) {
-      .plans {
-        justify-content: center;
-        gap: 1.5rem;
-      }
+    .discord-btn {
+  padding: 0.6rem 1.4rem;
+  background: linear-gradient(135deg, #00ffcc, #00cfff);
+  border-radius: 12px;
+  color: #000;
+  font-weight: 600;
+  text-shadow: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px #00ffff80;
+}
 
-      .plan {
-        width: 45vw;
-        min-width: 220px;
-      }
-    }
+.discord-btn:hover {
+  background: linear-gradient(135deg, #00ccff, #00ffaa);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00ffffaa;
+}
 
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem 1rem;
-        width: 95vw;
-        max-width: none;
-      }
-
-      .header-left {
-        align-items: center;
-        gap: 0.1rem;
-      }
-
-      header h1 {
-        font-size: 1.5rem;
-      }
-
-      .slogan {
-        font-size: 0.75rem;
-      }
-
-      nav {
-        margin-top: 0.5rem;
-        display: flex;
-        gap: 0.6rem;
-      }
-
-      nav a.discord-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-        margin-left: 0;
-        white-space: normal;
-      }
-
-      .plans {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 0 1rem;
-      }
-
-      .plan {
-        width: 90vw;
-        max-width: 350px;
-        padding: 1.5rem;
-      }
-
-      .plan button {
-        font-size: 0.9rem;
-        padding: 0.6rem 1rem;
-      }
-
-      .section {
-        padding: 3rem 1rem;
-      }
-
-      .timer {
-        font-size: 1.3rem;
-      }
-
-      .about,
-      .legal {
-        margin: 1rem 1rem 2rem 1rem;
-        padding: 1.5rem;
-        font-size: 0.9rem;
-      }
-
-      footer {
-        padding: 1.5rem 1rem;
-        font-size: 0.8rem;
-      }
-    }
   </style>
 </head>
 <body>
-  <header id="mainHeader" class="visible">
-    <div class="header-left">
-      <h1>OGCRAFTNETWORK</h1>
-      <p class="slogan">A Hosting Company</p>
+<header id="mainHeader" class="visible">
+  <div class="header-left">
+    <h1>OGCRAFTNETWORK</h1>
+    <p class="slogan">A Hosting Company</p>
+  </div>
+  <nav>
+    <a href="https://ogcraftnet.vip:8443" target="_blank" class="discord-btn">Panel</a>
+    <a href="https://discord.ogcraftnet.vip" target="_blank" class="discord-btn">Discord</a>
+  </nav>
+</header>
+
+
+
+
+  <section class="section" id="countdown">
+    <h2>Launch Countdown</h2>
+    <div class="timer" id="countdownDisplay"></div>
+  </section>
+
+  <section class="section plans" id="plans">
+    <div class="plan">
+      <h2>6GB RAM</h2>
+      <p>1 vCore</p>
+      <p>6€/month</p>
+      <button onclick="showPopup()">Get</button>
     </div>
-    <nav>
-      <a href="https://ogcraftnet.vip:8443" target="_blank" class="discord-btn"
-        >Panel</a
-      >
-      <a href="https://discord.ogcraftnet.vip" target="_blank" class="discord-btn"
-        >Discord</a
-      >
-    </nav>
-  </header>
+    <div class="plan">
+      <h2>12GB RAM</h2>
+      <p>2 vCores</p>
+      <p>12€/month</p>
+      <button onclick="showPopup()">Get</button>
+    </div>
+  </section>
 
-  <main>
-    <section class="section">
-      <h2>Hosted Plans</h2>
-      <div class="plans">
-        <div class="plan">
-          <h2>6GB Plan</h2>
-          <p>6GB RAM 0.75vcpus</p>
-          <button onclick="alert('Selected Basic Plan')">Select</button>
-        </div>
-        <div class="plan">
-          <h2>12GB Plan</h2>
-          <p>12GB RAM 1.5 vcpus</p>
-          <button onclick="alert('Selected Pro Plan')">Select</button>
-        </div>
-      </div>
-    </section>
+  <div class="popup" id="popup">Server will be available at launch day!</div>
 
-    <section class="about">
-      <h2>About OGCRAFTNETWORK</h2>
-      <p>
-        We provide reliable hosting solutions tailored for your projects,
-        ensuring performance and security.
-      </p>
-    </section>
+  <section class="section about" id="about">
+    <h2>About OGCRAFTNETWORK</h2>
+    <p>We are a modern, powerful and affordable Minecraft hosting company. OGCRAFTNETWORK focuses on simplicity, performance and gamer-friendly tools. Launching on July 30, 2026, we're excited to provide blazing fast Minecraft server hosting with glossy, modern UI and great support via our <a href="https://discord.ogcraftnet.vip" target="_blank">Discord</a>.</p>
+  </section>
 
-    <section class="legal">
-      <h2>Legal Information</h2>
-      <p>© 2025 OGCRAFTNETWORK. All rights reserved.</p>
-    </section>
-  </main>
+  <section class="legal" id="impressum">
+    <h2>imprint</h2>
+    <p>OGCRAFTNET STUDIOS<br>
+    by Simon L..<br>
+    Contact: <a href="mailto:ogcraftnet@eclipso.at">ogcraftnet@eclipso.at</a></p>
+  </section>
 
-  <div class="popup" id="popup">OGCRAFTNETWORK Hosting Panel loaded</div>
+  <section class="legal">
+    <h2>Privacy Policy</h2>
+    <p>Our privacy policy can be found at the following link:<br>
+    <a href="https://host.ogcraftnet.vip/privacy.html" target="_blank">Datenschutzerklärung (PDF)</a></p>
+  </section>
 
   <footer>
-    <p>
-      Made with ❤️ by <a href="https://ogcraftnet.vip" target="_blank"
-        >OGCRAFTNET STUDIOS</a
-      >
-    </p>
+    &copy; 2025 OGCRAFTNETWORK. All rights reserved.
   </footer>
 
   <script>
-    // Example: Show popup for 4 seconds, then hide
-    const popup = document.getElementById("popup");
-    popup.style.opacity = "1";
-    popup.style.pointerEvents = "auto";
+    const launchDate = new Date("2026-07-30T00:00:00").getTime();
+    const countdownEl = document.getElementById("countdownDisplay");
 
-    setTimeout(() => {
-      popup.style.opacity = "0";
-      popup.style.pointerEvents = "none";
-    }, 4000);
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = launchDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = Launching in ${days}d ${hours}h ${minutes}m ${seconds}s;
+    }, 1000);
+
+function showPopup() {
+  const popup = document.getElementById("popup");
+  popup.style.opacity = "1";
+  popup.style.pointerEvents = "auto";
+  popup.style.transform = "translate(-50%, -50%) scale(1)";
+  setTimeout(() => {
+    popup.style.opacity = "0";
+    popup.style.pointerEvents = "none";
+    popup.style.transform = "translate(-50%, -50%) scale(0.9)";
+  }, 4000);
+}
+
+
   </script>
+
+  <script>
+  const header = document.getElementById('mainHeader');
+  document.body.style.paddingTop = header.offsetHeight + 'px';
+
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+
+    if (currentScroll > lastScrollY && currentScroll > 100) {
+      header.classList.remove('visible');
+      header.classList.add('hidden');
+    } else {
+      header.classList.remove('hidden');
+      header.classList.add('visible');
+    }
+
+    lastScrollY = currentScroll;
+  });
+</script>
+
 </body>
 </html>
