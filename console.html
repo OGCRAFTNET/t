@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OGCRAFTNETWORK Server Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" type="image/svg+xml">
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-color: rgba(20, 20, 20, 0.74);
+      --accent: #00cfff;
+      --text-color: #f0f0f0;
+      --highlight: #66e0ff;
+      --success-color: #6bff99;
+      --danger-color: #ff4d6d;
+      --glass: blur(22px);
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Outfit',sans-serif;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-image: radial-gradient(circle at 25% 15%, rgba(0,200,255,0.04) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 90%, rgba(0,200,255,0.07) 0%, transparent 40%);
+      line-height: 1.6;
+    }
+    header {
+      position: fixed;
+      top: 0; left: 0; width: 100vw;
+      z-index: 9999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 1.2rem;
+      background: rgba(18, 18, 18, 0.79);
+      backdrop-filter: var(--glass);
+      border-bottom: 1.5px solid rgba(0,255,255,0.08);
+      box-shadow: 0 9px 32px rgba(0,207,255,0.17), 0 1.5px 12px 1px rgba(0,0,0,0.13);
+      animation: headerEnter 1.2s cubic-bezier(.42,0,.58,1), headerFloat 7s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    @keyframes headerEnter {
+      0% { transform: translateY(-100px) scale(0.95); opacity:0; }
+      75% { opacity:0.9; }
+      100% { transform: translateY(0) scale(1); opacity:1; }
+    }
+    @keyframes headerFloat {
+      0%   { transform: translateY(0) scale(1);}
+      50%  { transform: translateY(7px) scale(1.01);}
+      100% { transform: translateY(-5px) scale(1);}
+    }
+    .header-left {
+      display: flex; align-items: center; gap: 0.7rem;
+      min-width: 0;
+    }
+    .logo-circle {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--accent);
+      display: flex; justify-content: center; align-items: center;
+      font-weight: 700; font-size: 1.3rem;
+      box-shadow: 0 0 19px var(--accent);
+      flex-shrink: 0;
+      animation: logoBounce 4s ease-in-out infinite alternate;
+    }
+    @keyframes logoBounce {
+      0% { transform: translateY(0);}
+      20%{ transform: translateY(-3px) scale(1.045);}
+      75%{ transform: translateY(5px) scale(0.98);}
+      100%{ transform: translateY(0);}
+    }
+    header h1 {
+      font-size: 1.3rem; color: var(--accent);
+      text-shadow: 0 0 10px var(--accent);
+      margin: 0; white-space:nowrap;
+    }
+    .slogan {
+      font-size: 0.8rem; color: #99cccc;
+      letter-spacing: 1px; text-transform: uppercase;
+      font-weight: 600; margin-left: 0.4rem; display: block; white-space:nowrap;
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(0, 30, 40, 0.94), rgba(10, 10, 30, 0.91));
+      backdrop-filter: blur(15px);
+      padding-top: 7rem;
+      padding-bottom: 3rem;
+      text-align: center; border-bottom: 1px solid rgba(0, 207, 255, 0.18);
+      box-shadow: 0 0 50px rgba(0, 100, 150, 0.08); position: relative; overflow: hidden;
+    }
+    .particles {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; overflow: hidden; pointer-events: none;
+    }
+    .console-container {
+      max-width: 1200px; margin: 2rem auto; padding: 0 1rem;
+      display: grid; grid-template-columns: 1.5fr 1fr;
+      gap: 1.5rem;
+    }
+    .console-header {
+      text-align: center; margin-top: 2.5rem; 
+      animation: fadeInUp 1.1s;
+    }
+    .console-header h1 {
+      font-size: 2.5rem; color: var(--accent);
+      text-shadow: 0 0 20px var(--accent); margin-bottom: 1rem;
+    }
+    .panel {
+      background: var(--card-color); backdrop-filter: blur(8px);
+      border-radius: 13px; box-shadow: 0 12px 36px rgba(0, 20, 30, 0.32);
+      border: 1px solid rgba(0, 255, 255, 0.18); padding: 1.5rem;
+      transition: transform 0.33s cubic-bezier(.42,0,.58,1);
+      position: relative; overflow: hidden;
+    }
+    .panel:hover {
+      background: linear-gradient(120deg, rgba(18,22,28,0.85) 75%, rgba(0,207,255,0.18) 100%);
+      box-shadow: 0 16px 42px rgba(0, 255, 255, 0.32);
+    }
+    .panel-title {
+      font-size: 1.3rem; margin-bottom: 1.4rem;
+      color: var(--accent); padding-bottom: 0.6rem;
+      border-bottom: 2px solid rgba(0, 207, 255, 0.28);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .console-output {
+      height: 250px; overflow-y: auto; font-family: monospace;
+      font-size: 13px; padding: 1rem; background: rgba(10,15,20,0.65);
+      border-radius: 7px; margin-bottom: 1.2rem; line-height: 1.5;
+      border: 1px solid rgba(0, 207, 255, 0.13);
+    }
+    .console-command {
+      display: flex; 
+    }
+    .console-command input {
+      flex: 1; background: rgba(10,15,20,0.85); color: var(--text-color);
+      border: 1px solid rgba(0,207,255,0.22); padding: 0.8rem 1rem;
+      border-radius: 6px 0 0 6px; outline: none; font-size: 14px;
+    }
+    .console-command button {
+      background: var(--accent); color: #121212;
+      border: none; padding: 0.8rem 1.5rem; font-weight: 600;
+      cursor: pointer; border-radius: 0 6px 6px 0; transition: all 0.2s;
+    }
+    .console-command button:hover {
+      background: var(--highlight); box-shadow: 0 0 8px 2px var(--accent);
+    }
+    .status-indicator {
+      display: flex; align-items: center; margin-bottom: 1.3rem;
+    }
+    .status-circle {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--danger-color); margin-right: 0.7rem;
+      box-shadow: 0 0 8px var(--danger-color);
+    }
+    .status-circle.online { background: var(--success-color); box-shadow: 0 0 8px var(--success-color); }
+    .server-controls {
+      display: flex; gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .server-controls button {
+      flex: 1; min-width: 90px; background: transparent;
+      color: var(--text-color); border: 1.5px solid rgba(0,207,255,0.55);
+      padding: 0.7rem; border-radius: 7px; cursor: pointer;
+      transition: all 0.2s; font-weight: 600;
+    }
+    .server-controls button:hover {
+      background: rgba(0, 207, 255, 0.12); transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    #btn-start {
+      border-color: var(--success-color); 
+      color: var(--success-color);
+    }
+    #btn-start:hover {
+      background: rgba(107, 255, 153, 0.15);
+    }
+    #btn-stop {
+      border-color: var(--danger-color); color: var(--danger-color);
+    }
+    #btn-stop:hover {
+      background: rgba(255, 77, 109, 0.15);
+    }
+    /* File Manager Styling */
+    .file-manager {
+      display: flex; flex-direction: column; height: 100%;
+    }
+    .file-actions {
+      display: flex; gap: 0.7rem; margin-bottom: 1rem;
+    }
+    .file-actions button {
+      background: rgba(0, 207, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 207, 255, 0.4);
+      padding: 0.6rem 1rem; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    .file-actions button:hover {
+      background: rgba(0, 207, 255, 0.2);
+      border-color: var(--accent);
+    }
+    .file-path {
+      display: flex; align-items: center; 
+      background: rgba(10,15,20,0.4); 
+      border-radius: 6px; padding: 0.7rem; 
+      margin-bottom: 1rem; border: 1px solid rgba(0,207,255,0.22);
+    }
+    .file-path span {
+      font-size: 0.95rem; color: var(--text-color);
+      opacity: 0.8;
+    }
+    .file-path span:last-child {
+      font-weight: 600; opacity: 1; color: var(--accent);
+    }
+    .grid-view {
+      flex: 1; overflow-y: auto; padding: 0.3rem;
+      background: rgba(10,15,20,0.4); 
+      border-radius: 7px; border: 1px solid rgba(0,207,255,0.22);
+      position: relative;
+    }
+    .files-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 1rem;
+    }
+    .file-item {
+      background: rgba(20, 25, 30, 0.65);
+      border-radius: 8px; overflow: hidden;
+      cursor: pointer; transition: all 0.2s;
+      border: 1px solid rgba(0,207,255,0.2);
+      text-align: center;
+    }
+    .file-item:hover {
+      transform: translateY(-3px);
+      background: rgba(0,207,255,0.15);
+      box-shadow: 0 5px 12px rgba(0, 207, 255, 0.15);
+      border-color: var(--accent);
+    }
+    .file-icon {
+      display: flex; justify-content: center; align-items: center;
+      height: 80px; font-size: 2rem; background: rgba(0,0,0,0.2);
+      color: var(--accent);
+    }
+    .file-info {
+      padding: 0.5rem 0.3rem; 
+      border-top: 1px solid rgba(0,207,255,0.1);
+    }
+    .file-name {
+      font-size: 0.85rem; font-weight: 500;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      padding: 0 0.2rem;
+    }
+    .file-details {
+      display: flex; justify-content: space-between;
+      font-size: 0.7rem; color: #99cccc; margin-top: 0.3rem;
+    }
+    .file-item.selected {
+      background: rgba(0,207,255,0.25);
+      border-color: var(--accent);
+    }
+    .upload-area {
+      border: 2px dashed rgba(0,207,255,0.35); border-radius: 10px;
+      padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s;
+      margin-top: 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    .upload-area:hover {
+      border-color: var(--accent); background: rgba(0, 207, 255, 0.06);
+      box-shadow: 0 0 13px rgba(0, 207, 255, 0.15);
+    }
+    .upload-area i {
+      font-size: 2.5rem; color: var(--accent); margin-bottom: 0.7rem;
+      display: block;
+    }
+    .file-input { display: none; }
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes iconMicroFloat {
+      0% { transform: translateY(0);}
+      50%{ transform: translateY(-5px);}
+      100%{ transform: translateY(0);}
+    }
+    /* Editor styling */
+    .editor-view {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,15,20,0.95);
+      border-radius: 7px;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+      transform: translateX(100%);
+      transition: transform 0.4s;
+    }
+    .editor-view.open {
+      transform: translateX(0);
+    }
+    .editor-header {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0,207,255,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .editor-title {
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+    .editor-actions {
+      display: flex;
+      gap: 0.7rem;
+    }
+    .editor-content {
+      flex: 1;
+      padding: 1rem;
+    }
+    textarea {
+      width: 100%;
+      height: 100%;
+      background: rgba(5,10,15,0.5);
+      color: var(--text-color);
+      border: 1px solid rgba(0,207,255,0.3);
+      border-radius: 5px;
+      padding: 1rem;
+      font-family: monospace;
+      resize: none;
+      outline: none;
+    }
+    /* Info Bubble */
+    .notification-bubble {
+      position: fixed; left: 50%; top: 84px;
+      transform: translateX(-50%); z-index: 2000;
+      font-size: 1.01rem; padding: 0.8rem 1.8rem; border-radius: 8px;
+      color: var(--text-color); background: rgba(0, 207, 255, 0.86);
+      box-shadow: 0 5px 15px rgba(0, 207, 255, 0.34);
+      backdrop-filter: blur(10px); opacity: 0; pointer-events: none;
+      border-left: 4px solid var(--accent); transition: opacity 0.3s;
+    }
+    .notification-bubble.show { opacity: 1; }
+    
+    /* Server specs */
+    .server-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .spec-box {
+      background: rgba(0, 207, 255, 0.07);
+      border-radius: 10px;
+      padding: 1.2rem;
+      border: 1px solid rgba(0, 207, 255, 0.15);
+      transition: all 0.3s;
+    }
+    .spec-box:hover {
+      background: rgba(0, 207, 255, 0.15);
+      transform: translateY(-3px);
+    }
+    .spec-title {
+      color: #99cccc;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .spec-value {
+      font-size: 1.4rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .address-box {
+      grid-column: span 2;
+      text-align: center;
+      background: rgba(107, 255, 153, 0.08);
+      border-color: rgba(107, 255, 153, 0.25);
+    }
+    .copy-btn {
+      margin-top: 0.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 207, 255, 0.4);
+      color: var(--accent);
+      border-radius: 5px;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.8rem;
+    }
+    .copy-btn:hover {
+      background: rgba(0, 207, 255, 0.15);
+    }
+    /* Footer */
+    footer {
+      background: rgba(10, 10, 30, 0.91);
+      backdrop-filter: blur(15px);
+      padding: 3rem 0.7rem 1.2rem;
+      text-align: center;
+      box-shadow: 0 5px 25px rgba(0, 20, 30, 0.13);
+      border-top: 1px solid rgba(0, 207, 255, 0.13);
+      margin-top: 2rem;
+    }
+    .footer-logo {
+      font-size: 1.8rem; font-weight: 700; color: var(--accent); margin-bottom: 1.2rem;
+      display: inline-block; background: rgba(0, 207, 255, 0.08); padding: 0.6rem 2rem;
+      border-radius: 8px; box-shadow: 0 0 12px rgba(0, 207, 255, 0.07);
+      animation: logoBounce 4s ease-in-out infinite alternate;
+    }
+    .footer-links {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 1rem; margin: 1rem 0;
+    }
+    .footer-links a {
+      color: #999; text-decoration: none; transition: color 0.2s; font-size: 0.93rem; padding: 0.2rem 0;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .copyright {
+      color: #777; font-size: 0.87rem; margin-top: 1.2rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem;
+    }
+    
+    .cool-button {
+      background: linear-gradient(90deg, #00cfff 0%, #00ffaa 100%);
+      color: #111;
+      border: none;
+      border-radius: 12px;
+      padding: 0.7em 1.3em;
+      font-size: 1.08em;
+      font-weight: 600;
+      box-shadow: 0 4px 18px rgba(0,207,255, 0.23);
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .cool-button:hover {
+      transform: translateY(-2px) scale(1.06);
+      background: linear-gradient(90deg, #00ffaa 0%, #00cfff 100%);
+      box-shadow: 0 8px 22px #00ffaa66, 0 0 8px #00cfff66;
+    }
+    
+    .btn-wide {
+      display: block; width: 100%; margin-top: 0.8rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 1000px) {
+      .console-container {
+        grid-template-columns: 1fr;
+        max-width: 95%;
+      }
+      .console-header h1 { font-size: 2.1rem; }
+      .panel { padding: 1rem; }
+      .address-box {
+        grid-column: 1;
+      }
+    }
+    @media (max-width: 768px) {
+      .console-header { margin-top: 1rem; }
+      .console-header h1 { font-size: 1.8rem; }
+      .panel-title { font-size: 1.1rem; }
+      .console-output { height: 200px; }
+      .server-specs {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div class="logo-circle">O</div>
+      <h1>OGCRAFTNETWORK</h1>
+      <span class="slogan">Console Dashboard</span>
+    </div>
+    <nav>
+      <a href="index.html">Main Page</a>
+      <a href="#console">Console</a>
+      <a href="#files">File Manager</a>
+    </nav>
+  </header>
+  
+  <div class="hero">
+    <div class="particles" id="particles"></div>
+    <div class="console-header">
+      <h1>DEMO Console</h1>
+      <p>Manage your Minecraft server with full control</p>
+    </div>
+    
+    <div class="console-container">
+      <!-- Linke Spalte - Server Console -->
+      <div>
+        <div class="panel" id="server-console">
+          <div class="panel-title">
+            <i class="fas fa-terminal"></i> Server Console
+          </div>
+          
+          <div class="server-specs">
+            <div class="spec-box">
+              <div class="spec-title">RAM</div>
+              <div class="spec-value">12 GB</div>
+            </div>
+            <div class="spec-box">
+              <div class="spec-title">CPU</div>
+              <div class="spec-value">4 Cores</div>
+            </div>
+            <div class="spec-box">
+              <div class="spec-title">SSD</div>
+              <div class="spec-value">256 GB</div>
+            </div>
+            <div class="address-box spec-box">
+              <div class="spec-title">SERVER ADDRESS</div>
+              <div class="spec-value">demo.ogcraftnet.vip:25565</div>
+              <button class="copy-btn">Copy Address</button>
+            </div>
+          </div>
+          
+          <div class="status-indicator">
+            <div class="status-circle" id="status-circle"></div>
+            <div><strong>Status:</strong> <span id="status-text">OFFLINE</span></div>
+          </div>
+          
+          <div class="server-controls">
+            <button id="btn-start">START SERVER</button>
+            <button id="btn-restart">RESTART</button>
+            <button id="btn-stop">STOP</button>
+          </div>
+          
+          <div class="console-output" id="console-output">
+            <div>[INFO] Welcome to OGCRAFT Server Console</div>
+            <div>[INFO] Server status: offline</div>
+            <div>[INFO] Server IP: demo.ogcraftnet.vip</div>
+            <div>[INFO] Port: 25565</div>
+          </div>
+          
+          <div class="console-command">
+            <input type="text" id="cmd-input" placeholder="Enter server command...">
+            <button id="cmd-send">SEND</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Rechte Spalte - File Manager -->
+      <div>
+        <div class="panel file-manager" id="file-manager">
+          <div class="panel-title">
+            <i class="fas fa-folder-open"></i> File Manager
+          </div>
+          
+          <div class="file-actions">
+            <button id="btn-new-folder"><i class="fas fa-folder-plus"></i> New Folder</button>
+            <button id="btn-upload"><i class="fas fa-upload"></i> Upload</button>
+            <button id="btn-refresh"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+          
+          <div class="file-path">
+            Path: <span>/home/minecraft/server</span>
+          </div>
+          
+          <div class="grid-view">
+            <div class="files-grid" id="files-grid">
+              <!-- File items will be added dynamically -->
+            </div>
+            
+            <!-- Editor View -->
+            <div class="editor-view" id="editor-view">
+              <div class="editor-header">
+                <div class="editor-title">Edit File: <span id="editor-file-name"></span></div>
+                <div class="editor-actions">
+                  <button class="copy-btn" id="btn-save-file"><i class="fas fa-save"></i> Save</button>
+                  <button class="copy-btn" id="btn-close-editor"><i class="fas fa-times"></i></button>
+                </div>
+              </div>
+              <div class="editor-content">
+                <textarea id="file-editor"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <div class="upload-area" id="upload-area">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h3>Upload Files</h3>
+            <p>Drag & drop files here or click to browse</p>
+            <p>(Max size: 100MB)</p>
+            <input type="file" id="file-upload" class="file-input" multiple>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="footer-logo">OGCRAFTNETWORK</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+      <a href="https://discord.ogcraftnet.vip" target="_blank">Discord</a>
+      <a href="#">Help Center</a>
+    </div>
+    <p class="copyright">© 2025 OGCRAFTNET STUDIOS Ltd. - Minecraft Server Console</p>
+  </footer>
+
+  <div class="notification-bubble" id="notification-bubble"></div>
+  
+  <script>
+    // PARTICLE ANIMATION
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 45; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        const size = Math.random() * 5 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.background = 'rgba(0, 207, 255, ' + (Math.random() * 0.45 + 0.15) + ')';
+        particle.style.borderRadius = '50%';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.boxShadow = '0 0 5px ' + particle.style.background;
+        particle.style.zIndex = '-1';
+        // Animate particles
+        const animationDuration = Math.random() * 13 + 6;
+        particle.animate([
+          { transform: `translate(0, 0) scale(1)`, opacity: 0.9 },
+          { transform: `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px) scale(1.3)`, opacity: 0.5 },
+          { transform: `translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) scale(0.9)`, opacity: 0.8 }
+        ], {
+          duration: animationDuration * 1000,
+          iterations: Infinity,
+          direction: 'alternate',
+          easing: 'ease-in-out'
+        });
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // DOM elements
+    const statusCircle = document.getElementById('status-circle');
+    const statusText = document.getElementById('status-text');
+    const consoleOutput = document.getElementById('console-output');
+    const cmdInput = document.getElementById('cmd-input');
+    const btnStart = document.getElementById('btn-start');
+    const btnStop = document.getElementById('btn-stop');
+    const btnRestart = document.getElementById('btn-restart');
+    const btnCmdSend = document.getElementById('cmd-send');
+    const filesGrid = document.getElementById('files-grid');
+    const uploadArea = document.getElementById('upload-area');
+    const fileUpload = document.getElementById('file-upload');
+    const btnNewFolder = document.getElementById('btn-new-folder');
+    const btnUpload = document.getElementById('btn-upload');
+    const btnRefresh = document.getElementById('btn-refresh');
+    const editorView = document.getElementById('editor-view');
+    const fileNameElement = document.getElementById('editor-file-name');
+    const fileEditor = document.getElementById('file-editor');
+    const btnSaveFile = document.getElementById('btn-save-file');
+    const btnCloseEditor = document.getElementById('btn-close-editor');
+    const notificationBubble = document.getElementById('notification-bubble');
+    const copyBtn = document.querySelector('.copy-btn');
+    
+    // Server status variables
+    let isServerOnline = false;
+    let playersOnline = 0;
+    let selectedItem = null;
+    
+    // Initialize file system
+    const fileSystem = [
+      { name: 'world', type: 'folder', size: '2.3 GB', lastModified: '2023-06-15' },
+      { name: 'plugins', type: 'folder', size: '470 MB', lastModified: '2023-06-18' },
+      { name: 'server.properties', type: 'file', size: '1.2 KB', lastModified: '2023-06-20', content: `#Minecraft server properties
+#Tue Jun 20 15:32:15 UTC 2023
+spawn-protection=16
+max-tick-time=60000
+query.port=25565
+generator-settings=
+force-gamemode=false
+allow-nether=true
+gamemode=survival
+enable-query=false
+player-idle-timeout=0
+difficulty=easy
+spawn-monsters=true
+op-permission-level=4
+resource-pack-sha1=
+announce-player-achievements=true
+pvp=true
+snooper-enabled=false
+level-type=DEFAULT
+hardcore=false
+enable-command-block=false
+max-players=20
+network-compression-threshold=256
+max-world-size=29999984
+server-port=25565
+debug=false
+server-ip=
+spawn-npcs=true
+allow-flight=false
+level-name=world
+view-distance=10
+resource-pack=
+spawn-animals=true
+white-list=false
+generate-structures=true
+online-mode=true
+max-build-height=256
+level-seed=
+use-native-transport=true
+enable-rcon=false
+motd=Welcome to OGCRAFT Server!` 
+      },
+      { name: 'banned-players.json', type: 'file', size: '730 B', lastModified: '2023-06-17', content: `[]` },
+      { name: 'server.log', type: 'file', size: '12.4 MB', lastModified: '2023-06-20', content: '[INFO] Starting server...\n[INFO] Loading properties\n[INFO] Environment: default\n[INFO] Starting Minecraft server on *:25565' },
+      { name: 'config', type: 'folder', size: '87 MB', lastModified: '2023-06-16' },
+      { name: 'spigot.jar', type: 'file', size: '42 MB', lastModified: '2023-06-12' },
+      { name: 'world_nether', type: 'folder', size: '890 MB', lastModified: '2023-06-19' },
+      { name: 'ops.json', type: 'file', size: '172 B', lastModified: '2023-06-19', content: `[
+  {
+    "uuid": "abcd1234-5678-90ef-ghij-klmnopqrstuv",
+    "name": "Admin",
+    "level": 4,
+    "bypassesPlayerLimit": true
+  }
+]`}
+    ];
+    
+    // File icons mapping
+    const fileIcons = {
+      'folder': '📁',
+      'file': '📄',
+      '.jar': '☕',
+      '.json': '📝',
+      '.log': '📋',
+      '.properties': '⚙️'
+    };
+    
+    // Initialize notification system
+    function showNotification(message) {
+      notificationBubble.textContent = message;
+      notificationBubble.classList.add('show');
+      
+      setTimeout(() => {
+        notificationBubble.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Initialize file manager
+    function renderFileSystem() {
+      filesGrid.innerHTML = '';
+      
+      fileSystem.forEach((file, index) => {
+        const ext = file.name.includes('.') ? file.name.substring(file.name.lastIndexOf('.')) : '';
+        const icon = fileIcons[file.type] || (fileIcons[ext] || '📄');
+        
+        const fileElement = document.createElement('div');
+        fileElement.className = 'file-item';
+        if (selectedItem === index) {
+          fileElement.classList.add('selected');
+        }
+        fileElement.setAttribute('data-index', index);
+        
+        fileElement.innerHTML = `
+          <div class="file-icon">${icon}</div>
+          <div class="file-info">
+            <div class="file-name">${file.name}</div>
+            <div class="file-details">
+              ${file.type === 'folder' ? file.size : ''}
+              <span>${file.lastModified.split('-')[2]}/${file.lastModified.split('-')[1]}</span>
+            </div>
+          </div>
+        `;
+        
+        fileElement.addEventListener('click', () => {
+          selectedItem = index;
+          const allItems = document.querySelectorAll('.file-item');
+          allItems.forEach(item => item.classList.remove('selected'));
+          fileElement.classList.add('selected');
+        });
+        
+        fileElement.addEventListener('dblclick', () => {
+          if (file.type === 'folder') {
+            showNotification(`Opening folder: ${file.name}`);
+          } else {
+            // Show file content in editor
+            fileNameElement.textContent = file.name;
+            
+            if (file.content) {
+              fileEditor.value = file.content;
+            } else {
+              fileEditor.value = "// Binary file content cannot be displayed";
+            }
+            
+            editorView.classList.add('open');
+            filesGrid.style.display = 'none';
+          }
+        });
+        
+        filesGrid.appendChild(fileElement);
+      });
+    }
+    
+    // Initialize file upload
+    function setupFileUpload() {
+      uploadArea.addEventListener('click', () => {
+        fileUpload.click();
+      });
+      
+      fileUpload.addEventListener('change', event => {
+        const files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const newFile = {
+            name: file.name,
+            type: 'file',
+            size: formatFileSize(file.size),
+            lastModified: new Date().toISOString().split('T')[0]
+          };
+          
+          fileSystem.push(newFile);
+          showNotification(`Uploaded: ${file.name}`);
+          
+          // Log to console
+          logToConsole(`[FILE] Uploaded: ${file.name} (${formatFileSize(file.size)})`);
+        }
+        renderFileSystem();
+        fileUpload.value = '';
+      });
+    }
+    
+    // Format file size
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      else if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+      else return (bytes / 1073741824).toFixed(1) + ' GB';
+    }
+    
+    // Server control functions
+    function startServer() {
+      isServerOnline = true;
+      updateServerStatus();
+      
+      logToConsole('[SERVER] Starting server...');
+      logToConsole('[INFO] Loading properties');
+      
+      // Simulate server loading
+      setTimeout(() => {
+        logToConsole('[INFO] Starting Minecraft server on *:25565');
+      }, 1200);
+      
+      setTimeout(() => {
+        logToConsole('[INFO] Preparing spawn area...');
+        logToConsole('[INFO] Preparing spawn area: 3%');
+        logToConsole('[INFO] Preparing spawn area: 18%');
+        logToConsole('[INFO] Preparing spawn area: 40%');
+        logToConsole('[INFO] Preparing spawn area: 78%');
+        logToConsole('[INFO] Preparing spawn area: 100%');
+        logToConsole('[INFO] Server started successfully!');
+        logToConsole('[INFO] For help, type "help"');
+        logToConsole('[INFO] Player MinecraftMaster joined the game');
+        
+        // Simulate player count
+        playersOnline = 1;
+      }, 3500);
+    }
+    
+    function stopServer() {
+      isServerOnline = false;
+      updateServerStatus();
+      
+      logToConsole('[SERVER] Stopping server...');
+      logToConsole('[INFO] Saving player data...');
+      
+      // Simulate server stopping
+      setTimeout(() => {
+        logToConsole('[INFO] Saving worlds...');
+        logToConsole('[INFO] Closing threads...');
+        logToConsole('[SERVER] Server successfully stopped');
+      }, 2000);
+    }
+    
+    function restartServer() {
+      logToConsole('[SERVER] Restarting server...');
+      setTimeout(() => {
+        stopServer();
+        setTimeout(startServer, 1000);
+      }, 1500);
+    }
+    
+    function updateServerStatus() {
+      statusCircle.className = 'status-circle';
+      if (isServerOnline) {
+        statusText.textContent = 'ONLINE';
+        statusCircle.classList.add('online');
+      } else {
+        statusText.textContent = 'OFFLINE';
+      }
+    }
+    
+    function logToConsole(message) {
+      const p = document.createElement('div');
+      p.textContent = message;
+      consoleOutput.appendChild(p);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      renderFileSystem();
+      setupFileUpload();
+      updateServerStatus();
+      
+      // Server controls
+      btnStart.addEventListener('click', startServer);
+      btnStop.addEventListener('click', stopServer);
+      btnRestart.addEventListener('click', restartServer);
+      
+      // File manager buttons
+      btnNewFolder.addEventListener('click', () => {
+        const folderName = `new-folder-${Math.floor(Math.random() * 1000)}`;
+        fileSystem.unshift({
+          name: folderName,
+          type: 'folder',
+          size: '0 B',
+          lastModified: new Date().toISOString().split('T')[0]
+        });
+        renderFileSystem();
+        showNotification(`Created folder: ${folderName}`);
+        logToConsole(`[FILE] Created new folder: ${folderName}`);
+      });
+      
+      btnUpload.addEventListener('click', () => fileUpload.click());
+      btnRefresh.addEventListener('click', () => {
+        renderFileSystem();
+        showNotification('File list refreshed');
+        logToConsole('[INFO] Refreshed file list');
+      });
+      
+      // Console command system
+      btnCmdSend.addEventListener('click', sendConsoleCommand);
+      cmdInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') sendConsoleCommand();
+      });
+      
+      // Editor controls
+      btnCloseEditor.addEventListener('click', () => {
+        editorView.classList.remove('open');
+        filesGrid.style.display = 'grid';
+      });
+      
+      btnSaveFile.addEventListener('click', () => {
+        const index = selectedItem;
+        if (index !== null && fileSystem[index].type === 'file') {
+          fileSystem[index].content = fileEditor.value;
+          showNotification(`Saved changes to ${fileSystem[index].name}`);
+          logToConsole(`[FILE] Edited file: ${fileSystem[index].name}`);
+        }
+        editorView.classList.remove('open');
+        filesGrid.style.display = 'grid';
+      });
+      
+      // Copy server address
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText("mc.ogcraftnet.vip:25565");
+        showNotification('Server address copied to clipboard');
+        logToConsole('[INFO] Server address copied to clipboard');
+      });
+    });
+    
+    function sendConsoleCommand() {
+      const command = cmdInput.value.trim();
+      if (command) {
+        logToConsole(`> ${command}`);
+        
+        // Handle commands
+        if (command.toLowerCase() === 'help') {
+          logToConsole('[INFO] --- Available Commands ---');
+          logToConsole('[INFO] /help - Show this help message');
+          logToConsole('[INFO] /time set <value> - Set the time');
+          logToConsole('[INFO] /weather <type> - Change weather');
+          logToConsole('[INFO] /gamemode <mode> - Change game mode');
+          logToConsole('[INFO] /tp <player> - Teleport to a player');
+        } else if (command.toLowerCase() === 'stop') {
+          stopServer();
+        } else if (command.toLowerCase().startsWith('op ')) {
+          const player = command.split(' ').slice(1).join(' ') || 'Player';
+          logToConsole(`[INFO] Made ${player} a server operator`);
+        } else if (command.toLowerCase().startsWith('say ')) {
+          const message = command.substring(4);
+          logToConsole(`[Server] ${message}`);
+        } else {
+          logToConsole('[ERROR] Unknown command. Type "help" for help.');
+        }
+        
+        cmdInput.value = '';
+      }
+    }
+  </script>
+</body>
+</html>
