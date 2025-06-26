@@ -83,7 +83,7 @@
         <option value="">Bitte wählen...</option>
         <option value="minecraft-java">Minecraft Java Edition</option>
         <option value="fivem">FiveM</option>
-        <!-- Weitere Typen hier einfügen -->
+        <!-- Hier nur kompatible Typen von CraftyController -->
       </select>
 
       <button type="submit">Bestellen</button>
@@ -124,12 +124,7 @@
 
     const payload = {
       name: serverName,
-      type: serverType,
-      config: {
-        min_ram: 1024,
-        max_ram: 2048,
-        port: 25565
-      }
+      type: serverType
     };
 
     try {
