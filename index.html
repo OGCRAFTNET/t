@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OGCRAFTNETWORK – Launch Event 2026</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      width: 100vw; height: 100vh;
+      background: #070202;
+      color: #fff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: radial-gradient(ellipse 80% 40% at 50% 15%, #442f16aa 15%, #070202 65%) no-repeat;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 10px 30px;
+    }
+    header img.logo {
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .hero {
+      position: relative;
+      width: 100vw;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 6vh;
+      background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+    }
+    .overlay {
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 80% 40% at 50% 30%, #1b0a02c5 35%, #070202ee 100%);
+      z-index: 1;
+    }
+    .headline,
+    .subheadline,
+    .date-info {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      width: 100%;
+      margin: 0;
+    }
+    .headline {
+      font-size: clamp(2.5rem,9vw,6rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      margin-top: 8vh;
+      line-height: 1.06;
+      color: #fff;
+      text-shadow: 0 8px 24px #000a;
+    }
+    .subheadline {
+      font-size: 1.55rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #fff8;
+      letter-spacing: 0.01em;
+    }
+    .date-info {
+      font-size: 1.1rem;
+      color: #e0cdae;
+      margin-bottom: 36px;
+      letter-spacing: 0.02em;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #070202;
+      padding: 0 20px 60px 20px;
+    }
+    .lead {
+      text-align: center;
+      margin: 16px auto 30px auto;
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+      color: #fffde7;
+      font-weight: 600;
+      max-width: 600px;
+    }
+    .countdown {
+      display: flex;
+      gap: 26px;
+      margin: 2rem auto 3rem auto;
+      justify-content: center;
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+    .count-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 65px;
+    }
+    .count-label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #bfa578;
+      margin-top: 0.5em;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 10px #000b;
+    }
+
+    .partners {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 48px;
+      margin-bottom: 20px;
+    }
+    .partner-logo {
+      height: 48px;
+      filter: brightness(0.8) invert(0.9);
+      transition: filter 0.3s ease;
+    }
+    .partner-logo:hover {
+      filter: brightness(1.1) invert(1);
+    }
+
+    form.newsletter {
+      display: flex;
+      gap: 8px;
+      max-width: 400px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    form.newsletter input[type="email"] {
+      flex-grow: 1;
+      padding: 10px 16px;
+      border-radius: 24px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+    }
+    form.newsletter button {
+      background: #7c4dff;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 10px #a682ffcc;
+    }
+    form.newsletter button:hover {
+      background: #a068ff;
+    }
+    .message {
+      color: #b8f2b4;
+      font-weight: 700;
+      margin-top: 16px;
+      min-height: 24px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .hero { min-height: 48vh; padding-bottom: 12vw; }
+      .headline { font-size: 2.3rem; }
+      .subheadline { font-size: 1.08rem; }
+      .countdown { font-size: 1.3rem; gap: 11px;}
+      .count-label { font-size: 0.7rem; }
+      header {
+        justify-content: center;
+        padding: 12px 10px;
+      }
+      .partners {
+        gap: 20px;
+      }
+      form.newsletter {
+        max-width: 100%;
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img class="logo" src="https://i.ibb.co/TxrxHgzK/logo-long.png" alt="OGCRAFTNETWORK Logo" />
+</header>
+
+<section class="hero">
+  <div class="overlay"></div>
+  <h1 class="headline">Ganz nah dran</h1>
+  <h2 class="subheadline">OGCRAFTNETWORK Launch September 2026</h2>
+  <div class="date-info">Weltweit | 18.09.2026 | 18:00 (CEST)</div>
+</section>
+
+<main>
+  <div class="lead">
+    Mach dich bereit für den Launch und entdecke unser neues Hosting-Erlebnis!
+  </div>
+
+  <div class="countdown" id="countdown">
+    <div class="count-box"><span id="days">00</span> <span class="count-label">Tage</span></div>
+    <div class="count-box"><span id="hours">00</span> <span class="count-label">Stunden</span></div>
+    <div class="count-box"><span id="minutes">00</span> <span class="count-label">Minuten</span></div>
+    <div class="count-box"><span id="seconds">00</span> <span class="count-label">Sekunden</span></div>
+  </div>
+
+  <div class="partners" aria-label="Partner Logos">
+    <img class="partner-logo" src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo" />
+    <img class="partner-logo" src="https://1000logos.net/wp-content/uploads/2017/04/Oracle-Logo-1.png" alt="Oracle Logo" />
+  </div>
+
+  <form class="newsletter" onsubmit="submitNewsletter(event)">
+    <input type="email" id="newsletter-email" name="email" placeholder="E-Mail für Newsletter" required />
+    <button type="submit">Anmelden</button>
+  </form>
+  <div class="message" id="message"></div>
+</main>
+
+<script>
+  const target = new Date('2026-09-18T16:00:00Z').getTime();
+  function runCountdown() {
+    const now = new Date().getTime();
+    let diff = Math.max(0, target - now);
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff / (1000*60*60)) % 24);
+    const m = Math.floor((diff / (1000*60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+    document.getElementById("days").textContent = String(d).padStart(2,"0");
+    document.getElementById("hours").textContent = String(h).padStart(2,"0");
+    document.getElementById("minutes").textContent = String(m).padStart(2,"0");
+    document.getElementById("seconds").textContent = String(s).padStart(2,"0");
+  }
+  runCountdown();
+  setInterval(runCountdown, 1000);
+
+  function submitNewsletter(event) {
+    event.preventDefault();
+    const emailInput = document.getElementById('newsletter-email');
+    const messageDiv = document.getElementById('message');
+    if(emailInput.checkValidity()) {
+      // Hier könntest du API-Aufruf oder Mailer-Integration ergänzen
+      messageDiv.textContent = "Danke für deine Anmeldung zum Newsletter!";
+      emailInput.value = "";
+    } else {
+      messageDiv.textContent = "Bitte gib eine gültige E-Mail-Adresse ein.";
+    }
+  }
+</script>
+
+</body>
+</html>
