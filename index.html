@@ -121,6 +121,131 @@
       text-shadow: 0 2px 10px #000b;
     }
 
+    /* New tech section styles */
+    .tech-section {
+      width: 100%;
+      max-width: 1200px;
+      margin: 60px auto 40px;
+      padding: 40px 30px;
+      background: rgba(20, 15, 10, 0.7);
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(124, 77, 255, 0.3);
+    }
+    .tech-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      color: #e0cdae;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+      position: relative;
+      padding-bottom: 15px;
+    }
+    .tech-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, #7c4dff, #ffb74d);
+      border-radius: 3px;
+    }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    .tech-category {
+      background: rgba(35, 25, 15, 0.8);
+      padding: 25px;
+      border-radius: 12px;
+      border-left: 4px solid #7c4dff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tech-category:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(124, 77, 255, 0.2);
+    }
+    .tech-category.premium {
+      border-left-color: #ffb74d;
+    }
+    .tech-category.premium:hover {
+      box-shadow: 0 10px 25px rgba(255, 183, 77, 0.2);
+    }
+    .tech-header {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tech-header img {
+      height: 32px;
+      width: auto;
+    }
+    .tech-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .tech-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+    }
+    .tech-list li:last-child {
+      border-bottom: none;
+    }
+    .tech-icon {
+      margin-right: 12px;
+      color: #bfa578;
+      font-size: 1.3rem;
+    }
+    .cpu-image {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin: 15px 0;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+    }
+    .tech-note {
+      margin-top: 30px;
+      text-align: center;
+      font-style: italic;
+      color: #bfa578;
+      font-size: 1rem;
+      padding: 15px;
+      background: rgba(20, 15, 10, 0.5);
+      border-radius: 8px;
+    }
+    .partner-powered {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .partner-logos {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .partner-logos img {
+      height: 50px;
+      filter: brightness(0.9);
+      transition: filter 0.3s ease;
+    }
+    .partner-logos img:hover {
+      filter: brightness(1.2);
+    }
+
     .partners {
       width: 100%;
       max-width: 600px;
@@ -178,6 +303,18 @@
       text-align: center;
     }
 
+    @media (max-width: 768px) {
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+      .tech-category {
+        padding: 20px;
+      }
+      .tech-title {
+        font-size: 2rem;
+      }
+    }
+
     @media (max-width: 640px) {
       .hero { min-height: 48vh; padding-bottom: 12vw; }
       .headline { font-size: 2.3rem; }
@@ -194,6 +331,17 @@
       form.newsletter {
         max-width: 100%;
         padding: 0 10px;
+        flex-direction: column;
+      }
+      .tech-section {
+        padding: 25px 15px;
+        margin: 40px auto 30px;
+      }
+      .partner-logos {
+        gap: 25px;
+      }
+      .partner-logos img {
+        height: 40px;
       }
     }
   </style>
@@ -222,18 +370,89 @@
     <div class="count-box"><span id="minutes">00</span> <span class="count-label">Minutes</span></div>
     <div class="count-box"><span id="seconds">00</span> <span class="count-label">Secounds</span></div>
   </div>
+  <!-- Support Button & Modal -->
+  <button id="support-btn" aria-label="Support" title="Support" style="position:fixed;right:18px;bottom:18px;background:#7c4dff;border:none;color:#fff;padding:12px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(124,77,255,0.25);cursor:pointer;font-weight:700;z-index:9999;">Support</button>
 
-  <div class="partners" aria-label="Partner Logos">
-    <img class="partner-logo" src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo" />
-    <img class="partner-logo" src="https://1000logos.net/wp-content/uploads/2017/04/Oracle-Logo-1.png" alt="Oracle Logo" />
+  <div id="support-modal" role="dialog" aria-modal="true" aria-hidden="true" style="position:fixed;left:0;top:0;right:0;bottom:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:9998;">
+    <div id="support-modal-content" style="width:95%;max-width:640px;background:#0a0707;padding:20px;border-radius:12px;border:1px solid rgba(124,77,255,0.12);box-shadow:0 12px 40px rgba(0,0,0,0.6);color:#fff;transform-origin:center center;transform:scale(0.6) translateY(30px);opacity:0;transition:transform 320ms cubic-bezier(.2,.9,.2,1),opacity 260ms ease;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;font-size:1.15rem;">Support Request</h3>
+        <button id="support-close" aria-label="Close" style="background:transparent;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">✕</button>
+      </div>
+      <p style="color:#d7c9ff;margin:0 0 12px 0;font-size:0.95rem;">Describe your issue. Clicking "Open here" will open your email client in this window with a prefilled message to <code>contact@ogcraftnet.vip</code>. </p>
+      <form id="support-form">
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <input id="support-name" name="name" placeholder="Name" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
+          <input id="support-email" name="email" type="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
+        </div>
+        <input id="support-subject" name="subject" placeholder="Subject" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:8px;" />
+        <textarea id="support-message" name="message" placeholder="Your message" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:10px;"></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end;align-items:center;">
+          <button type="button" id="support-cancel" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;">Cancel</button>
+          <button type="submit" id="support-send" style="background:#27a844;border:none;color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700;">Open here</button>
+        </div>
+      </form>
+      </div>
   </div>
 
-  <form class="newsletter" onsubmit="submitNewsletter(event)">
-    <input type="email" id="newsletter-email" name="email" placeholder="E-Mail für Newsletter" required />
-    <button type="submit">Anmelden</button>
-  </form>
-  <div class="message" id="message"></div>
-</main>
+  <!-- New Tech Section -->
+  <section class="tech-section">
+    <h2 class="tech-title">Our high-performance technology</h2>
+    
+    <div class="tech-grid">
+      <div class="tech-category">
+        <h3 class="tech-header">
+          ARM & Snapdragon Prozessoren
+        </h3>
+        <img src="https://media.icdn.hu/content/entity/2024/09/76290/66fa634fcc809qualxomm-snapdragon-x-elite-logo.jpg" alt="Snapdragon X Elite" class="cpu-image">
+        <ul class="tech-list">
+          <li><span class="tech-icon">⚡</span> Snapdragon X Elite CPUs</li>
+          <li><span class="tech-icon">⚡</span> Snapdragon X Plus CPUs</li>
+          <li><span class="tech-icon">⚡</span> Energy-efficient ARM architecture</li>
+          <li><span class="tech-icon">⚡</span> Revolutionary AI capabilities</li>
+        </ul>
+      </div>
+      
+      <div class="tech-category premium">
+        <h3 class="tech-header">
+          Premium Intel Optionen
+        </h3>
+        <img src="https://www.hatchwise.com/wp-content/uploads/2023/03/pasted-image-0-17.png" alt="Intel Prozessor" class="cpu-image">
+        <ul class="tech-list">
+          <li><span class="tech-icon">🔥</span> Intel Core i9-9900K</li>
+          <li><span class="tech-icon">🔥</span> Intel Core i7-12900K</li>
+          <li><span class="tech-icon">🔥</span> Intel Core i9-13900K</li>
+          <li><span class="tech-icon">🔥</span> Maximum single-core performance</li>
+        </ul>
+      </div>
+      
+      <div class="tech-category premium">
+        <h3 class="tech-header">
+          Premium AMD Optionen
+        </h3>
+        <img src="https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/1413018-am5-ryzen.jpg" alt="AMD Prozessor" class="cpu-image">
+        <ul class="tech-list">
+          <li><span class="tech-icon">💎</span> AMD Ryzen 5 5600X</li>
+          <li><span class="tech-icon">💎</span> AMD Ryzen 7 7700X</li>
+          <li><span class="tech-icon">💎</span> AMD Ryzen AI Technologie</li>
+          <li><span class="tech-icon">💎</span> Excellent multi-core performance</li>
+        </ul>
+      </div>
+    </div>
+    
+    <p class="tech-note">* Premium processors are available at an additional cost and offer maximum performance for demanding workloads.</p>
+    
+    <div class="partner-powered">
+      <p>Powered by our exclusive technology partners:</p>
+      <div class="partner-logos">
+        <img src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo">
+        <img src="https://1000logos.net/wp-content/uploads/2017/04/Oracle-Logo-1.png" alt="Oracle Logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Snapdragon_Logo.svg/1200px-Snapdragon_Logo.svg.png" alt="Snapdragon Logo" style="height: 35px;">
+      </div>
+    </div>
+  </section>
+
+
 
 <script>
   const target = new Date('2026-09-18T16:00:00Z').getTime();
@@ -265,6 +484,111 @@
     }
   }
 </script>
+
+  <script>
+    // Support modal behavior and mailto creation
+    (function(){
+      const btn = document.getElementById('support-btn');
+      const modal = document.getElementById('support-modal');
+      const closeBtn = document.getElementById('support-close');
+      const cancelBtn = document.getElementById('support-cancel');
+      const form = document.getElementById('support-form');
+
+      function openModal(){
+        const content = document.getElementById('support-modal-content');
+        // show backdrop
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+        // compute support button position to animate from
+        try{
+          const btnRect = btn.getBoundingClientRect();
+          const vw = window.innerWidth; const vh = window.innerHeight;
+          // compute transform to place content over button initially
+          const contentRect = content.getBoundingClientRect();
+          const fromX = btnRect.left + btnRect.width/2 - (vw/2);
+          const fromY = btnRect.top + btnRect.height/2 - (vh/2);
+          // set transform origin and initial transform to match button
+          content.style.transformOrigin = 'center center';
+          content.style.transition = 'none';
+          content.style.transform = `translate(${fromX}px, ${fromY}px) scale(0.4)`;
+          content.style.opacity = '0';
+          // force layout then animate to center
+          requestAnimationFrame(()=>{
+            content.style.transition = 'transform 320ms cubic-bezier(.2,.9,.2,1),opacity 260ms ease';
+            content.style.transform = 'translate(0px, 0px) scale(1)';
+            content.style.opacity = '1';
+            const nameInput = document.getElementById('support-name');
+            setTimeout(()=>{ nameInput && nameInput.focus(); }, 260);
+          });
+        }catch(err){
+          // fallback: simple fade/scale
+          content.style.transform = 'scale(0.6) translateY(30px)';
+          requestAnimationFrame(()=>{
+            content.style.transition = 'transform 320ms cubic-bezier(.2,.9,.2,1),opacity 260ms ease';
+            content.style.transform = 'translate(0px,0px) scale(1)';
+            content.style.opacity = '1';
+          });
+        }
+      }
+      function closeModal(){
+        const content = document.getElementById('support-modal-content');
+        // animate back to button
+        try{
+          const btnRect = btn.getBoundingClientRect();
+          const vw = window.innerWidth; const vh = window.innerHeight;
+          const fromX = btnRect.left + btnRect.width/2 - (vw/2);
+          const fromY = btnRect.top + btnRect.height/2 - (vh/2);
+          content.style.transition = 'transform 240ms cubic-bezier(.2,.9,.2,1),opacity 200ms ease';
+          content.style.transform = `translate(${fromX}px, ${fromY}px) scale(0.4)`;
+          content.style.opacity = '0';
+          setTimeout(()=>{ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }, 260);
+        }catch(err){
+          content.style.opacity = '0';
+          setTimeout(()=>{ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }, 260);
+        }
+      }
+
+      btn && btn.addEventListener('click', openModal);
+      closeBtn && closeBtn.addEventListener('click', closeModal);
+      cancelBtn && cancelBtn.addEventListener('click', closeModal);
+      modal && modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
+
+  // No popout — only in-window mailto
+
+      function buildMailto(){
+        const name = document.getElementById('support-name').value.trim();
+        const email = document.getElementById('support-email').value.trim();
+        const subject = document.getElementById('support-subject').value.trim() || 'Support request from website';
+        const message = document.getElementById('support-message').value.trim();
+        if(!message){
+          alert('Please describe your issue.');
+          return null;
+        }
+        let body = '';
+        if(name) body += 'Name: ' + name + '\n';
+        if(email) body += 'Email: ' + email + '\n';
+        body += '\n--- Message ---\n' + message + '\n\n--- End ---\n';
+        const to = 'contact@ogcraftnet.vip';
+        return 'mailto:' + encodeURIComponent(to)
+          + '?subject=' + encodeURIComponent(subject)
+          + '&body=' + encodeURIComponent(body);
+      }
+
+      // Open here (in same window) on submit
+      form && form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const mailto = buildMailto();
+        if(!mailto) return;
+        // Open mail client in same window/tab
+        window.location.href = mailto;
+        closeModal();
+      });
+
+      // No popout handler — sending opens mail client in same window
+    })();
+  </script>
+
 
 </body>
 </html>
