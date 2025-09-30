@@ -1462,7 +1462,6 @@
             uploadedFileType = null;
             markedAreas = [];
             
-            // Reset UI
             document.getElementById('uploadOptions').style.display = 'grid';
             document.getElementById('uploadArea').classList.remove('active');
             document.getElementById('cameraContainer').classList.remove('active');
@@ -1531,7 +1530,7 @@
             try {
                 cameraStream = await navigator.mediaDevices.getUserMedia({ 
                     video: { 
-                        facingMode: 'environment', // Rückkamera auf Mobile
+                        facingMode: 'environment',
                         width: { ideal: 1920 },
                         height: { ideal: 1080 }
                     } 
@@ -1841,7 +1840,7 @@
             showLoadingModal();
 
             try {
-                const apiKey = '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';
+                const apiKey = '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';
                 const model = 'google/gemma-3-27b-it:free';
 
                 let prompt = currentLang === 'de' 
@@ -1900,7 +1899,8 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                showErrorModal(t.errorMsg);
+                closeModal();
+                showToast(t.errorMsg, 'error');
             }
         }
 
@@ -1955,21 +1955,6 @@
                         <h3>✅ ${t.solutionsTitle}</h3>
                         <div class="result-text">${result || 'Keine Lösungen verfügbar'}</div>
                     </div>
-                </div>
-            `;
-            
-            modal.classList.add('active');
-        }
-
-        function showErrorModal(message) {
-            const t = translations[currentLang];
-            const modal = document.getElementById('modal');
-            const modalBody = document.getElementById('modalBody');
-            
-            modalBody.innerHTML = `
-                <div style="text-align:center;padding:40px;">
-                    <h2 style="color:var(--danger);margin-bottom:20px;">❌ ${t.errorTitle}</h2>
-                    <div style="color:var(--text-secondary);">${message}</div>
                 </div>
             `;
             
