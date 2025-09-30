@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worksheet Completer Pro</title>
+    <style>
+        /* ==================== VARIABLES ==================== */
+        :root[data-theme="light"] {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f1f5f9;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        :root[data-theme="dark"] {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --secondary: #a78bfa;
+            --success: #34d399;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            width: 320px;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, background 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-secondary);
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .history-item:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .history-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .history-item-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .history-item-date {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .history-item-preview {
+            font-size: 11px;
+            margin-top: 6px;
+            opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .history-btn {
+            padding: 6px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .history-item.active .history-btn {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .history-item.active .history-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .history-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .history-btn.delete-btn {
+            background: var(--danger);
+        }
+
+        .history-btn.delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .new-chat-btn {
+            margin: 15px;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .new-chat-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            background: var(--bg-primary);
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            transition: background 0.3s ease;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toggle-sidebar {
+            background: var(--bg-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            color: var(--text-primary);
+        }
+
+        .toggle-sidebar:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            background: var(--bg-secondary);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .header-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ==================== WORKSPACE ==================== */
+        .workspace {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .workspace-inner {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            animation: bounce 2s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ==================== UPLOAD OPTIONS ==================== */
+        .upload-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .upload-option {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .upload-option-icon {
+            font-size: 48px;
+        }
+
+        .upload-option-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .upload-option-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== UPLOAD AREA ==================== */
+        .upload-area {
+            border: 3px dashed var(--border);
+            border-radius: 16px;
+            padding: 50px 30px;
+            text-align: center;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .upload-area.active {
+            display: block;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--bg-tertiary);
+            transform: scale(1.02);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--success);
+            background: var(--bg-tertiary);
+            transform: scale(1.05);
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .upload-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-preview {
+            margin-top: 20px;
+            border-radius: 16px;
+            overflow: hidden;
+            display: none;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .file-preview img,
+        .file-preview iframe {
+            max-width: 100%;
+            border-radius: 16px;
+            border: 2px solid var(--border);
+        }
+
+        .file-preview iframe {
+            width: 100%;
+            height: 500px;
+        }
+
+        /* ==================== CAMERA ==================== */
+        .camera-container {
+            display: none;
+            margin-top: 20px;
+            border-radius: 16px;
+            overflow: hidden;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .camera-container.active {
+            display: block;
+        }
+
+        .camera-video {
+            width: 100%;
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+            display: block;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .camera-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+
+        .camera-btn.capture {
+            background: var(--success);
+            color: white;
+        }
+
+        .camera-btn.capture:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .camera-btn.cancel {
+            background: var(--danger);
+            color: white;
+        }
+
+        .camera-btn.cancel:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* ==================== MODE TABS ==================== */
+        .mode-tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mode-tab {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .mode-tab:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .mode-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .mode-content {
+            display: none;
+        }
+
+        .mode-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ==================== INPUT FIELD ==================== */
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        /* ==================== MARKER CANVAS ==================== */
+        .marker-canvas-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            display: none;
+            margin-top: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .marker-canvas-container.active {
+            display: block;
+        }
+
+        .marker-canvas {
+            max-width: 100%;
+            cursor: crosshair;
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            display: block;
+        }
+
+        .marker-info {
+            text-align: center;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-top: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            display: none;
+        }
+
+        .marker-info.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .marker-controls {
+            display: none;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .marker-controls.active {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        .marker-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .marker-btn:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ==================== SUBMIT BUTTON ==================== */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ==================== MODAL ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 1100px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            color: var(--text-primary);
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+            color: white;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* ==================== LOADING ==================== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ==================== RESULT ==================== */
+        .result-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .result-section {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .result-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-worksheet {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+        }
+
+        .result-worksheet img {
+            width: 100%;
+            display: block;
+        }
+
+        .result-worksheet iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+
+        .result-text {
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary);
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 600px;
+            overflow-y: auto;
+            color: var(--text-primary);
+        }
+
+        /* ==================== SETTINGS MODAL ==================== */
+        .settings-content {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .settings-content h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .setting-item {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .setting-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .setting-label {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .setting-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .setting-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-tertiary);
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                box-shadow: var(--shadow-lg);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .result-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .workspace {
+                padding: 20px 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 12px 15px;
+            }
+
+            .header-title h1 {
+                font-size: 20px;
+            }
+
+            .mode-tabs, .upload-options {
+                grid-template-columns: 1fr;
+            }
+
+            .file-preview iframe {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+            }
+
+            .header-title {
+                display: none;
+            }
+
+            .modal-content {
+                padding: 25px;
+            }
+        }
+
+        /* ==================== SCROLLBAR ==================== */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-secondary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* ==================== TOAST NOTIFICATIONS ==================== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: toastSlideIn 0.3s ease;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(400px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📋 <span id="history-title">Verlauf</span></h2>
+                <button class="btn-icon" onclick="toggleSidebar()">×</button>
+            </div>
+            <button class="new-chat-btn" onclick="newChat()">
+                ➕ <span id="new-chat-text">Neuer Chat</span>
+            </button>
+            <div class="history-list" id="historyList"></div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+                    <div class="header-title">
+                        <h1 id="app-title">Worksheet Completer Pro</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" onclick="openSettings()">
+                        ⚙️ <span id="settings-btn-text">Einstellungen</span>
+                    </button>
+                    <button class="header-btn" onclick="toggleLanguage()">
+                        🌐 <span id="lang-btn-text">English</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="workspace">
+                <div class="workspace-inner">
+                    <!-- UPLOAD CARD -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-icon">📤</span>
+                            <h2 class="card-title" id="upload-title">Arbeitsblatt hinzufügen</h2>
+                        </div>
+
+                        <!-- Upload Options -->
+                        <div class="upload-options" id="uploadOptions">
+                            <div class="upload-option" onclick="selectUploadMethod('file')">
+                                <div class="upload-option-icon">📁</div>
+                                <div class="upload-option-title" id="option-file-title">Datei hochladen</div>
+                                <div class="upload-option-desc" id="option-file-desc">PDF oder Bild auswählen</div>
+                            </div>
+                            <div class="upload-option" onclick="selectUploadMethod('camera')">
+                                <div class="upload-option-icon">📸</div>
+                                <div class="upload-option-title" id="option-camera-title">Foto aufnehmen</div>
+                                <div class="upload-option-desc" id="option-camera-desc">Mit Kamera fotografieren</div>
+                            </div>
+                        </div>
+
+                        <!-- File Upload Area -->
+                        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                            <div class="upload-icon">📄</div>
+                            <div class="upload-text" id="upload-text">Datei hochladen</div>
+                            <div class="upload-hint" id="upload-hint">PDF oder Bild - Drag & Drop unterstützt</div>
+                        </div>
+                        <input type="file" id="fileInput" class="file-input" accept="image/*,application/pdf" onchange="handleFileSelect(event)">
+
+                        <!-- Camera Container -->
+                        <div class="camera-container" id="cameraContainer">
+                            <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+                            <div class="camera-controls">
+                                <button class="camera-btn capture" onclick="capturePhoto()">
+                                    📸 <span id="btn-capture-text">Foto aufnehmen</span>
+                                </button>
+                                <button class="camera-btn cancel" onclick="stopCamera()">
+                                    ✖️ <span id="btn-cancel-text">Abbrechen</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- File Preview -->
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+
+                    <!-- SELECTION CARD -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-icon">🎯</span>
+                            <h2 class="card-title" id="selection-title">Aufgaben auswählen</h2>
+                        </div>
+                        
+                        <div class="mode-tabs">
+                            <div class="mode-tab active" onclick="switchMode('numbers')" id="tab-numbers">
+                                <span>🔢</span> <span id="tab-numbers-text">Nummern eingeben</span>
+                            </div>
+                            <div class="mode-tab" onclick="switchMode('marker')" id="tab-marker">
+                                <span>✏️</span> <span id="tab-marker-text">Bereiche markieren</span>
+                            </div>
+                        </div>
+
+                        <div class="mode-content active" id="mode-numbers">
+                            <input type="text" class="input-field" id="numberInput" placeholder="z.B. 1, 3, 5, 7-10 oder Aufgabe 1a, 2b">
+                        </div>
+
+                        <div class="mode-content" id="mode-marker">
+                            <div class="marker-canvas-container" id="markerContainer">
+                                <canvas id="markerCanvas" class="marker-canvas"></canvas>
+                            </div>
+                            <div class="marker-info" id="marker-info">
+                                📍 <span id="marker-count">0</span> <span id="marker-count-text">Markierungen</span>
+                            </div>
+                            <div class="marker-controls" id="marker-controls">
+                                <button class="marker-btn" onclick="clearLastMarker()">
+                                    ↩️ <span id="btn-undo-text">Letzte löschen</span>
+                                </button>
+                                <button class="marker-btn" onclick="clearAllMarkers()">
+                                    🗑️ <span id="btn-clear-text">Alle löschen</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="submit-btn" id="submitBtn" onclick="completeWorksheet()" disabled>
+                            <span>✨</span> <span id="submit-text">Jetzt vervollständigen</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // TRANSLATIONS
+        const translations = {
+            de: {
+                appTitle: 'Worksheet Completer Pro',
+                historyTitle: 'Verlauf',
+                newChat: 'Neuer Chat',
+                settingsBtn: 'Einstellungen',
+                langBtn: 'English',
+                uploadTitle: 'Arbeitsblatt hinzufügen',
+                optionFileTitle: 'Datei hochladen',
+                optionFileDesc: 'PDF oder Bild auswählen',
+                optionCameraTitle: 'Foto aufnehmen',
+                optionCameraDesc: 'Mit Kamera fotografieren',
+                uploadText: 'Datei hochladen',
+                uploadHint: 'PDF oder Bild - Drag & Drop unterstützt',
+                selectionTitle: 'Aufgaben auswählen',
+                tabNumbers: 'Nummern eingeben',
+                tabMarker: 'Bereiche markieren',
+                numberPlaceholder: 'z.B. 1, 3, 5, 7-10 oder Aufgabe 1a, 2b',
+                markerCountText: 'Markierungen',
+                btnUndo: 'Letzte löschen',
+                btnClear: 'Alle löschen',
+                btnCapture: 'Foto aufnehmen',
+                btnCancel: 'Abbrechen',
+                submitText: 'Jetzt vervollständigen',
+                loadingText: 'Analysiere Arbeitsblatt...',
+                worksheetTitle: 'Arbeitsblatt',
+                solutionsTitle: 'Lösungen',
+                errorTitle: 'Fehler',
+                noFile: 'Bitte lade zuerst eine Datei hoch.',
+                noSelection: 'Bitte wähle Aufgaben aus.',
+                errorMsg: 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.',
+                cameraError: 'Kamera konnte nicht gestartet werden. Bitte überprüfe die Berechtigungen.',
+                viewBtn: 'Ansehen',
+                deleteBtn: 'Löschen',
+                confirmDelete: 'Chat wirklich löschen?',
+                settingsTitle: 'Einstellungen',
+                darkModeTitle: 'Dark Mode',
+                darkModeDesc: 'Dunkles Design aktivieren',
+                newChatToast: 'Neuer Chat erstellt',
+                chatDeletedToast: 'Chat gelöscht',
+                fileUploadedToast: 'Datei hochgeladen',
+                photoTakenToast: 'Foto aufgenommen'
+            },
+            en: {
+                appTitle: 'Worksheet Completer Pro',
+                historyTitle: 'History',
+                newChat: 'New Chat',
+                settingsBtn: 'Settings',
+                langBtn: 'Deutsch',
+                uploadTitle: 'Add Worksheet',
+                optionFileTitle: 'Upload File',
+                optionFileDesc: 'Select PDF or image',
+                optionCameraTitle: 'Take Photo',
+                optionCameraDesc: 'Capture with camera',
+                uploadText: 'Upload File',
+                uploadHint: 'PDF or Image - Drag & Drop supported',
+                selectionTitle: 'Select Tasks',
+                tabNumbers: 'Enter Numbers',
+                tabMarker: 'Mark Areas',
+                numberPlaceholder: 'e.g. 1, 3, 5, 7-10 or Task 1a, 2b',
+                markerCountText: 'Marks',
+                btnUndo: 'Delete last',
+                btnClear: 'Delete all',
+                btnCapture: 'Take Photo',
+                btnCancel: 'Cancel',
+                submitText: 'Complete Now',
+                loadingText: 'Analyzing worksheet...',
+                worksheetTitle: 'Worksheet',
+                solutionsTitle: 'Solutions',
+                errorTitle: 'Error',
+                noFile: 'Please upload a file first.',
+                noSelection: 'Please select tasks.',
+                errorMsg: 'An error occurred. Please try again.',
+                cameraError: 'Could not start camera. Please check permissions.',
+                viewBtn: 'View',
+                deleteBtn: 'Delete',
+                confirmDelete: 'Really delete chat?',
+                settingsTitle: 'Settings',
+                darkModeTitle: 'Dark Mode',
+                darkModeDesc: 'Enable dark theme',
+                newChatToast: 'New chat created',
+                chatDeletedToast: 'Chat deleted',
+                fileUploadedToast: 'File uploaded',
+                photoTakenToast: 'Photo taken'
+            }
+        };
+
+        // GLOBAL STATE
+        let currentLang = 'de';
+        let currentChatId = null;
+        let uploadedFile = null;
+        let uploadedFileBase64 = null;
+        let uploadedFileType = null;
+        let currentMode = 'numbers';
+        let markedAreas = [];
+        let isDrawing = false;
+        let startX, startY;
+        let chatHistory = [];
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        let cameraStream = null;
+
+        // INIT
+        function init() {
+            loadChatHistory();
+            applyDarkMode();
+            updateUI();
+            if (chatHistory.length === 0) {
+                newChat();
+            }
+        }
+
+        // DARK MODE
+        function applyDarkMode() {
+            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            localStorage.setItem('darkMode', darkMode);
+            applyDarkMode();
+        }
+
+        // LANGUAGE
+        function toggleLanguage() {
+            currentLang = currentLang === 'de' ? 'en' : 'de';
+            updateUI();
+            renderHistory();
+        }
+
+        function updateUI() {
+            const t = translations[currentLang];
+            document.getElementById('app-title').textContent = t.appTitle;
+            document.getElementById('history-title').textContent = t.historyTitle;
+            document.getElementById('new-chat-text').textContent = t.newChat;
+            document.getElementById('settings-btn-text').textContent = t.settingsBtn;
+            document.getElementById('lang-btn-text').textContent = t.langBtn;
+            document.getElementById('upload-title').textContent = t.uploadTitle;
+            document.getElementById('option-file-title').textContent = t.optionFileTitle;
+            document.getElementById('option-file-desc').textContent = t.optionFileDesc;
+            document.getElementById('option-camera-title').textContent = t.optionCameraTitle;
+            document.getElementById('option-camera-desc').textContent = t.optionCameraDesc;
+            document.getElementById('upload-text').textContent = t.uploadText;
+            document.getElementById('upload-hint').textContent = t.uploadHint;
+            document.getElementById('selection-title').textContent = t.selectionTitle;
+            document.getElementById('tab-numbers-text').textContent = t.tabNumbers;
+            document.getElementById('tab-marker-text').textContent = t.tabMarker;
+            document.getElementById('numberInput').placeholder = t.numberPlaceholder;
+            document.getElementById('marker-count-text').textContent = t.markerCountText;
+            document.getElementById('btn-undo-text').textContent = t.btnUndo;
+            document.getElementById('btn-clear-text').textContent = t.btnClear;
+            document.getElementById('btn-capture-text').textContent = t.btnCapture;
+            document.getElementById('btn-cancel-text').textContent = t.btnCancel;
+            document.getElementById('submit-text').textContent = t.submitText;
+        }
+
+        // SIDEBAR
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // CHAT HISTORY
+        function loadChatHistory() {
+            const stored = localStorage.getItem('worksheetHistory');
+            chatHistory = stored ? JSON.parse(stored) : [];
+            renderHistory();
+        }
+
+        function saveChatHistory() {
+            localStorage.setItem('worksheetHistory', JSON.stringify(chatHistory));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const t = translations[currentLang];
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+
+            if (chatHistory.length === 0) {
+                historyList.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary);">Kein Verlauf</div>`;
+                return;
+            }
+
+            chatHistory.forEach(chat => {
+                const item = document.createElement('div');
+                item.className = 'history-item' + (chat.id === currentChatId ? ' active' : '');
+                
+                const resultPreview = chat.result ? chat.result.substring(0, 50).replace(/\n/g, ' ') + '...' : '';
+                
+                item.innerHTML = `
+                    <div class="history-item-title">📄 ${chat.filename || 'Unbenannt'}</div>
+                    <div class="history-item-date">${new Date(chat.date).toLocaleString('de-DE', { 
+                        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    })}</div>
+                    <div class="history-item-preview">${resultPreview}</div>
+                    <div class="history-actions">
+                        <button class="history-btn" data-chat-id="${chat.id}" data-action="view">👁️ ${t.viewBtn}</button>
+                        <button class="history-btn delete-btn" data-chat-id="${chat.id}" data-action="delete">🗑️ ${t.deleteBtn}</button>
+                    </div>
+                `;
+                
+                const viewBtn = item.querySelector('[data-action="view"]');
+                const deleteBtn = item.querySelector('[data-action="delete"]');
+                
+                viewBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewChat(chat.id);
+                });
+                
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteChat(chat.id);
+                });
+                
+                historyList.appendChild(item);
+            });
+        }
+
+        function newChat() {
+            currentChatId = 'chat_' + Date.now();
+            
+            uploadedFile = null;
+            uploadedFileBase64 = null;
+            uploadedFileType = null;
+            markedAreas = [];
+            
+            // Reset UI
+            document.getElementById('uploadOptions').style.display = 'grid';
+            document.getElementById('uploadArea').classList.remove('active');
+            document.getElementById('cameraContainer').classList.remove('active');
+            
+            const filePreview = document.getElementById('filePreview');
+            filePreview.style.display = 'none';
+            filePreview.innerHTML = '';
+            
+            const markerContainer = document.getElementById('markerContainer');
+            markerContainer.classList.remove('active');
+            markerContainer.style.display = 'none';
+            
+            document.getElementById('numberInput').value = '';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('submitBtn').disabled = true;
+            
+            stopCamera();
+            updateMarkerCount();
+            renderHistory();
+            showToast(translations[currentLang].newChatToast, 'info');
+            
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.add('collapsed');
+            }
+        }
+
+        function viewChat(chatId) {
+            const chat = chatHistory.find(c => c.id === chatId);
+            if (!chat) return;
+
+            currentChatId = chatId;
+            showResultModal(chat.result, chat.fileBase64, chat.fileType, chat.filename);
+            renderHistory();
+
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.add('collapsed');
+            }
+        }
+
+        function deleteChat(chatId) {
+            const t = translations[currentLang];
+            if (confirm(t.confirmDelete)) {
+                chatHistory = chatHistory.filter(c => c.id !== chatId);
+                saveChatHistory();
+                showToast(t.chatDeletedToast, 'success');
+                if (currentChatId === chatId) {
+                    newChat();
+                }
+            }
+        }
+
+        // UPLOAD METHOD SELECTION
+        function selectUploadMethod(method) {
+            document.getElementById('uploadOptions').style.display = 'none';
+            
+            if (method === 'file') {
+                document.getElementById('uploadArea').classList.add('active');
+            } else if (method === 'camera') {
+                startCamera();
+            }
+        }
+
+        // CAMERA FUNCTIONS
+        async function startCamera() {
+            const t = translations[currentLang];
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment', // Rückkamera auf Mobile
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    } 
+                });
+                
+                const video = document.getElementById('cameraVideo');
+                video.srcObject = cameraStream;
+                document.getElementById('cameraContainer').classList.add('active');
+                
+            } catch (error) {
+                console.error('Camera error:', error);
+                showToast(t.cameraError, 'error');
+                document.getElementById('uploadOptions').style.display = 'grid';
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            document.getElementById('cameraContainer').classList.remove('active');
+            document.getElementById('uploadOptions').style.display = 'grid';
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            canvas.toBlob((blob) => {
+                const file = new File([blob], `foto_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                processFile(file);
+                stopCamera();
+                showToast(translations[currentLang].photoTakenToast, 'success');
+            }, 'image/jpeg', 0.95);
+        }
+
+        // FILE UPLOAD
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) processFile(file);
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) processFile(file);
+        }
+
+        async function processFile(file) {
+            uploadedFile = file;
+            uploadedFileType = file.type;
+            uploadedFileBase64 = await fileToBase64(file);
+            
+            filePreview.innerHTML = '';
+            
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = uploadedFileBase64;
+                img.onload = () => {
+                    filePreview.appendChild(img);
+                    filePreview.style.display = 'block';
+                    setupMarkerCanvas(img);
+                };
+            } else if (file.type === 'application/pdf') {
+                const iframe = document.createElement('iframe');
+                iframe.src = uploadedFileBase64;
+                filePreview.appendChild(iframe);
+                filePreview.style.display = 'block';
+            }
+
+            document.getElementById('submitBtn').disabled = false;
+            showToast(translations[currentLang].fileUploadedToast, 'success');
+        }
+
+        // MODE SWITCHING
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-' + mode).classList.add('active');
+            document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('mode-' + mode).classList.add('active');
+        }
+
+        // MARKER CANVAS
+        function setupMarkerCanvas(img) {
+            const canvas = document.getElementById('markerCanvas');
+            const container = document.getElementById('markerContainer');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            ctx.drawImage(img, 0, 0);
+
+            container.classList.add('active');
+            container.style.display = 'block';
+            
+            markedAreas = [];
+            updateMarkerCount();
+
+            const newCanvas = canvas.cloneNode(true);
+            canvas.parentNode.replaceChild(newCanvas, canvas);
+            const freshCanvas = document.getElementById('markerCanvas');
+            
+            const freshCtx = freshCanvas.getContext('2d');
+            freshCtx.drawImage(img, 0, 0);
+
+            freshCanvas.addEventListener('mousedown', startDrawing);
+            freshCanvas.addEventListener('mousemove', draw);
+            freshCanvas.addEventListener('mouseup', stopDrawing);
+            freshCanvas.addEventListener('mouseleave', stopDrawing);
+            freshCanvas.addEventListener('touchstart', handleTouchStart);
+            freshCanvas.addEventListener('touchmove', handleTouchMove);
+            freshCanvas.addEventListener('touchend', stopDrawing);
+            freshCanvas.addEventListener('contextmenu', handleRightClick);
+        }
+
+        function redrawCanvas() {
+            const canvas = document.getElementById('markerCanvas');
+            const ctx = canvas.getContext('2d');
+            const img = filePreview.querySelector('img');
+            
+            if (!img) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+
+            markedAreas.forEach(area => {
+                ctx.strokeStyle = 'rgba(99, 102, 241, 0.8)';
+                ctx.fillStyle = 'rgba(99, 102, 241, 0.2)';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(area.x, area.y, area.width, area.height);
+                ctx.fillRect(area.x, area.y, area.width, area.height);
+            });
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = e.target.getBoundingClientRect();
+            const scaleX = e.target.width / rect.width;
+            const scaleY = e.target.height / rect.height;
+            startX = (e.clientX - rect.left) * scaleX;
+            startY = (e.clientY - rect.top) * scaleY;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const canvas = document.getElementById('markerCanvas');
+            const ctx = canvas.getContext('2d');
+            const rect = e.target.getBoundingClientRect();
+            const scaleX = e.target.width / rect.width;
+            const scaleY = e.target.height / rect.height;
+            const currentX = (e.clientX - rect.left) * scaleX;
+            const currentY = (e.clientY - rect.top) * scaleY;
+
+            redrawCanvas();
+
+            const width = currentX - startX;
+            const height = currentY - startY;
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.8)';
+            ctx.fillStyle = 'rgba(99, 102, 241, 0.2)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(startX, startY, width, height);
+            ctx.fillRect(startX, startY, width, height);
+        }
+
+        function stopDrawing(e) {
+            if (!isDrawing) return;
+            isDrawing = false;
+
+            const canvas = document.getElementById('markerCanvas');
+            const rect = e.target.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const endX = (e.clientX - rect.left) * scaleX;
+            const endY = (e.clientY - rect.top) * scaleY;
+
+            const width = endX - startX;
+            const height = endY - startY;
+
+            if (Math.abs(width) > 10 && Math.abs(height) > 10) {
+                markedAreas.push({
+                    x: Math.min(startX, endX),
+                    y: Math.min(startY, endY),
+                    width: Math.abs(width),
+                    height: Math.abs(height)
+                });
+                updateMarkerCount();
+                redrawCanvas();
+            }
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            e.target.dispatchEvent(mouseEvent);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            e.target.dispatchEvent(mouseEvent);
+        }
+
+        function handleRightClick(e) {
+            e.preventDefault();
+            const canvas = document.getElementById('markerCanvas');
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const clickX = (e.clientX - rect.left) * scaleX;
+            const clickY = (e.clientY - rect.top) * scaleY;
+
+            for (let i = markedAreas.length - 1; i >= 0; i--) {
+                const area = markedAreas[i];
+                if (clickX >= area.x && clickX <= area.x + area.width &&
+                    clickY >= area.y && clickY <= area.y + area.height) {
+                    markedAreas.splice(i, 1);
+                    updateMarkerCount();
+                    redrawCanvas();
+                    break;
+                }
+            }
+        }
+
+        function clearLastMarker() {
+            if (markedAreas.length > 0) {
+                markedAreas.pop();
+                updateMarkerCount();
+                redrawCanvas();
+            }
+        }
+
+        function clearAllMarkers() {
+            markedAreas = [];
+            updateMarkerCount();
+            redrawCanvas();
+        }
+
+        function updateMarkerCount() {
+            document.getElementById('marker-count').textContent = markedAreas.length;
+            const markerInfo = document.getElementById('marker-info');
+            const markerControls = document.getElementById('marker-controls');
+            
+            if (markedAreas.length > 0) {
+                markerInfo.classList.add('active');
+                markerControls.classList.add('active');
+            } else {
+                markerInfo.classList.remove('active');
+                markerControls.classList.remove('active');
+            }
+        }
+
+        // COMPLETE WORKSHEET
+        async function completeWorksheet() {
+            const t = translations[currentLang];
+
+            if (!uploadedFile) {
+                alert(t.noFile);
+                return;
+            }
+
+            let taskDescription = '';
+
+            if (currentMode === 'numbers') {
+                const numbers = document.getElementById('numberInput').value.trim();
+                if (!numbers) {
+                    alert(t.noSelection);
+                    return;
+                }
+                taskDescription = numbers;
+            } else if (currentMode === 'marker') {
+                if (markedAreas.length === 0) {
+                    alert(t.noSelection);
+                    return;
+                }
+                taskDescription = 'alle markierten Bereiche';
+            }
+
+            showLoadingModal();
+
+            try {
+                const apiKey = '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';
+                const model = 'google/gemma-3-27b-it:free';
+
+                let prompt = currentLang === 'de' 
+                    ? `Löse folgende Aufgaben: ${taskDescription}\n\nFORMATIERUNG:\n- Verwende EXAKTE Nummerierung vom Arbeitsblatt\n- Format: "Aufgabe 1) a) b)" oder "1. 2. 3."\n- NUR direkte Antworten - KEINE Erklärungen\n- KEINE Einleitungssätze\n- Übernimm Aufgabenstruktur präzise\n\nBEISPIEL:\nArbeitsblatt: "Aufgabe 1) a) 5+3? b) 10-4?"\nAntwort: "Aufgabe 1) a) 8 b) 6"`
+                    : `Solve these tasks: ${taskDescription}\n\nFORMATTING:\n- Use EXACT numbering from worksheet\n- Format: "Task 1) a) b)" or "1. 2. 3."\n- ONLY direct answers - NO explanations\n- NO introductory sentences\n- Follow task structure precisely\n\nEXAMPLE:\nWorksheet: "Task 1) a) 5+3? b) 10-4?"\nAnswer: "Task 1) a) 8 b) 6"`;
+
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': window.location.href,
+                        'X-Title': 'Worksheet Completer Pro'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [{
+                            role: 'user',
+                            content: [
+                                { type: 'text', text: prompt },
+                                { type: 'image_url', image_url: { url: uploadedFileBase64 } }
+                            ]
+                        }],
+                        temperature: 0.2
+                    })
+                });
+
+                if (!response.ok) throw new Error('API request failed');
+
+                const data = await response.json();
+                const result = data.choices[0].message.content;
+
+                const chat = {
+                    id: currentChatId,
+                    filename: uploadedFile.name,
+                    date: new Date().toISOString(),
+                    tasks: taskDescription,
+                    result: result,
+                    fileBase64: uploadedFileBase64,
+                    fileType: uploadedFileType
+                };
+
+                const existingIndex = chatHistory.findIndex(c => c.id === currentChatId);
+                if (existingIndex >= 0) {
+                    chatHistory[existingIndex] = chat;
+                } else {
+                    chatHistory.unshift(chat);
+                }
+
+                if (chatHistory.length > 50) {
+                    chatHistory = chatHistory.slice(0, 50);
+                }
+
+                saveChatHistory();
+                showResultModal(result, uploadedFileBase64, uploadedFileType, uploadedFile.name);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showErrorModal(t.errorMsg);
+            }
+        }
+
+        // HELPERS
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function showLoadingModal() {
+            const t = translations[currentLang];
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text">${t.loadingText}</div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function showResultModal(result, fileBase64, fileType, filename) {
+            const t = translations[currentLang];
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+            
+            let worksheetHTML = '';
+            if (fileBase64 && fileType) {
+                if (fileType.startsWith('image/')) {
+                    worksheetHTML = `<img src="${fileBase64}" alt="${filename || 'Worksheet'}">`;
+                } else if (fileType === 'application/pdf') {
+                    worksheetHTML = `<iframe src="${fileBase64}"></iframe>`;
+                }
+            } else {
+                worksheetHTML = `<div style="padding:20px;text-align:center;color:var(--text-secondary);">Keine Vorschau verfügbar</div>`;
+            }
+            
+            modalBody.innerHTML = `
+                <div class="result-container">
+                    <div class="result-section">
+                        <h3>📄 ${t.worksheetTitle}</h3>
+                        <div class="result-worksheet">${worksheetHTML}</div>
+                    </div>
+                    <div class="result-section">
+                        <h3>✅ ${t.solutionsTitle}</h3>
+                        <div class="result-text">${result || 'Keine Lösungen verfügbar'}</div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function showErrorModal(message) {
+            const t = translations[currentLang];
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div style="text-align:center;padding:40px;">
+                    <h2 style="color:var(--danger);margin-bottom:20px;">❌ ${t.errorTitle}</h2>
+                    <div style="color:var(--text-secondary);">${message}</div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        });
+
+        // SETTINGS
+        function openSettings() {
+            const t = translations[currentLang];
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div class="settings-content">
+                    <h2>⚙️ ${t.settingsTitle}</h2>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div class="setting-title">${t.darkModeTitle}</div>
+                            <div class="setting-desc">${t.darkModeDesc}</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${darkMode ? 'checked' : ''} onchange="toggleDarkMode()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // TOAST NOTIFICATIONS
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastSlideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // INIT
+        init();
+    </script>
+</body>
+</html>
