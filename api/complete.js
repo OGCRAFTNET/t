@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                'Authorization': `Bearer ${process.env.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}`,
                 'Content-Type': 'application/json',
                 'HTTP-Referer': 'https://host.ogcraftnet.vip/worksheets.html'
             },
