@@ -1,593 +1,743 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" type="image/svg+xml">
-  <title>OGCRAFTNETWORK – Launch Event 2026</title>
-  <style>
-    html, body {
-      margin: 0; padding: 0;
-      width: 100vw; height: 100vh;
-      background: #070202;
-      color: #fff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      overflow-x: hidden;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OGCRAFTNETWORK – Launch Event 2026</title>
+<style>
+  :root {
+    --btn-scale: 1;
+    --btn-bg: #7c4dff;
+    --btn-shadow: 0 4px 12px rgba(124,77,255,0.4);
+    --btn-padding: 10px 16px;
+    --btn-radius: 50px;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #070202;
+    color: #fff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: radial-gradient(ellipse 80% 40% at 50% 15%, #442f16aa 15%, #070202 65%) no-repeat;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    padding: 10px 30px;
+  }
+  header img.logo {
+    height: 48px;
+    object-fit: contain;
+  }
+  .hero {
+    position: relative;
+    width: 100vw;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 6vh;
+    background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+  }
+  .overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse 80% 40% at 50% 30%, #1b0a02c5 35%, #070202ee 100%);
+    z-index: 1;
+  }
+  .headline, .subheadline, .date-info {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+  }
+  .headline {
+    font-size: clamp(2.5rem,9vw,6rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    margin-top: 8vh;
+    line-height: 1.06;
+    color: #fff;
+    text-shadow: 0 8px 24px #000a;
+  }
+  .subheadline {
+    font-size: 1.55rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #fff8;
+    letter-spacing: 0.01em;
+  }
+  .date-info {
+    font-size: 1.1rem;
+    color: #e0cdae;
+    margin-bottom: 36px;
+    letter-spacing: 0.02em;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #070202;
+    padding: 0 20px 60px 20px;
+  }
+  .lead {
+    text-align: center;
+    margin: 16px auto 30px auto;
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+    color: #fffde7;
+    font-weight: 600;
+    max-width: 600px;
+  }
+  .countdown {
+    display: flex;
+    gap: 26px;
+    margin: 2rem auto 3rem auto;
+    justify-content: center;
+    font-size: 2.6rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+  }
+  .count-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 65px;
+  }
+  .count-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #bfa578;
+    margin-top: 0.5em;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 10px #000b;
+  }
+  /* Moderne Tech Section */
+  .tech-section {
+    width: 100%;
+    max-width: 1300px;
+    margin: 60px auto 40px;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tech-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.05) 0%, rgba(255, 183, 77, 0.05) 100%);
+    border-radius: 24px;
+    z-index: 0;
+  }
+  .tech-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 7, 7, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    z-index: 0;
+  }
+  .tech-content {
+    position: relative;
+    z-index: 1;
+  }
+  .tech-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #e0cdae 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+  .tech-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #bfa578;
+    margin-bottom: 50px;
+    font-weight: 400;
+  }
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .tech-category {
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(.2,.9,.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .tech-category::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+  .tech-category:hover::before {
+    left: 100%;
+  }
+  .tech-category:hover {
+    transform: translateY(-8px);
+    border-color: rgba(124, 77, 255, 0.5);
+    box-shadow: 0 20px 40px rgba(124, 77, 255, 0.2);
+  }
+  .tech-category.premium {
+    background: linear-gradient(135deg, rgba(255, 183, 77, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
+    border-color: rgba(255, 183, 77, 0.2);
+  }
+  .tech-category.premium::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 183, 77, 0.1), transparent);
+  }
+  .tech-category.premium:hover {
+    border-color: rgba(255, 183, 77, 0.5);
+    box-shadow: 0 20px 40px rgba(255, 183, 77, 0.2);
+  }
+  .tech-header {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tech-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(124, 77, 255, 0.2);
+    color: #a68dff;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    margin-left: auto;
+  }
+  .tech-category.premium .tech-badge {
+    background: rgba(255, 183, 77, 0.2);
+    color: #ffb74d;
+    border-color: rgba(255, 183, 77, 0.3);
+  }
+  .cpu-image {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    transition: transform 0.3s ease;
+  }
+  .tech-category:hover .cpu-image {
+    transform: scale(1.05);
+  }
+  .tech-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tech-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    transition: all 0.2s ease;
+  }
+  .tech-list li:hover {
+    padding-left: 8px;
+    color: #fff;
+  }
+  .tech-list li:last-child {
+    border-bottom: none;
+  }
+  .tech-icon {
+    margin-right: 12px;
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+  .tech-note {
+    text-align: center;
+    font-style: italic;
+    color: #bfa578;
+    font-size: 0.95rem;
+    padding: 20px;
+    background: rgba(20, 15, 10, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(124, 77, 255, 0.1);
+    margin-bottom: 40px;
+  }
+  .partner-section {
+    text-align: center;
+    padding: 40px 30px;
+    background: rgba(20, 15, 10, 0.4);
+    border-radius: 16px;
+    border: 1px solid rgba(124, 77, 255, 0.1);
+  }
+  .partner-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #fff;
+  }
+  .partner-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+  }
+  .partner-logo-wrap {
+    padding: 20px 30px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+  }
+  .partner-logo-wrap:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(124, 77, 255, 0.3);
+    transform: translateY(-5px);
+  }
+  .partner-logos img {
+    height: 45px;
+    filter: brightness(0.85) saturate(0.8);
+    transition: filter 0.3s ease;
+  }
+  .partner-logo-wrap:hover img {
+    filter: brightness(1.1) saturate(1);
+  }
+  
+  /* CSS Variables Support Button - BUG-FREI! */
+  #support-btn-container {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10001;
+  }
+  
+  #support-btn {
+    background: var(--btn-bg);
+    border: none;
+    color: #fff;
+    padding: var(--btn-padding);
+    border-radius: var(--btn-radius);
+    box-shadow: var(--btn-shadow);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+    transform: scale(var(--btn-scale));
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+  
+  #support-btn:hover:not(.active) {
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(124,77,255,0.6);
+  }
+  
+  #support-btn .btn-text {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+    white-space: nowrap;
+  }
+  
+  #support-btn.active .btn-text {
+    opacity: 0;
+    transform: scale(0.5) rotate(90deg);
+  }
+  
+  #support-btn .close-icon {
+    position: absolute;
+    opacity: 0;
+    font-size: 1.3rem;
+    font-weight: 300;
+    transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+    transform: scale(0) rotate(-90deg);
+  }
+  
+  #support-btn.active .close-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  
+  /* Modal */
+  #support-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0);
+    z-index: 10000;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    pointer-events: none;
+    transition: background 0.4s ease;
+  }
+  
+  #support-modal.show {
+    pointer-events: auto;
+    background: rgba(0,0,0,0.65);
+  }
+  
+  #support-modal-content {
+    background: #0a0707;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(124,77,255,0.2);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    color: #fff;
+    width: 90%;
+    max-width: 420px;
+    margin: 0 20px 90px 20px;
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+    transform-origin: bottom right;
+    transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  #support-modal.show #support-modal-content {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  
+  @media (max-width: 768px) {
+    .tech-grid {
+      grid-template-columns: 1fr;
     }
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      background: radial-gradient(ellipse 80% 40% at 50% 15%, #442f16aa 15%, #070202 65%) no-repeat;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      padding: 10px 30px;
-    }
-    header img.logo {
-      height: 48px;
-      object-fit: contain;
-    }
-
-    .hero {
-      position: relative;
-      width: 100vw;
-      min-height: 60vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      padding-bottom: 6vh;
-      background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
-    }
-    .overlay {
-      position: absolute;
-      left: 0; top: 0; right: 0; bottom: 0;
-      background: radial-gradient(ellipse 80% 40% at 50% 30%, #1b0a02c5 35%, #070202ee 100%);
-      z-index: 1;
-    }
-    .headline,
-    .subheadline,
-    .date-info {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      width: 100%;
-      margin: 0;
-    }
-    .headline {
-      font-size: clamp(2.5rem,9vw,6rem);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      margin-bottom: 12px;
-      margin-top: 8vh;
-      line-height: 1.06;
-      color: #fff;
-      text-shadow: 0 8px 24px #000a;
-    }
-    .subheadline {
-      font-size: 1.55rem;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: #fff8;
-      letter-spacing: 0.01em;
-    }
-    .date-info {
-      font-size: 1.1rem;
-      color: #e0cdae;
-      margin-bottom: 36px;
-      letter-spacing: 0.02em;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: #070202;
-      padding: 0 20px 60px 20px;
-    }
-    .lead {
-      text-align: center;
-      margin: 16px auto 30px auto;
-      font-size: 1.1rem;
-      letter-spacing: 0.01em;
-      color: #fffde7;
-      font-weight: 600;
-      max-width: 600px;
-    }
-    .countdown {
-      display: flex;
-      gap: 26px;
-      margin: 2rem auto 3rem auto;
-      justify-content: center;
-      font-size: 2.6rem;
-      font-weight: 900;
-      letter-spacing: 0.06em;
-    }
-    .count-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 65px;
-    }
-    .count-label {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #bfa578;
-      margin-top: 0.5em;
-      letter-spacing: 0.02em;
-      text-shadow: 0 2px 10px #000b;
-    }
-
-    /* New tech section styles */
     .tech-section {
-      width: 100%;
-      max-width: 1200px;
-      margin: 60px auto 40px;
-      padding: 40px 30px;
-      background: rgba(20, 15, 10, 0.7);
-      border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(124, 77, 255, 0.3);
+      padding: 40px 20px;
     }
     .tech-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 40px;
-      color: #e0cdae;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-      position: relative;
-      padding-bottom: 15px;
+      font-size: 2rem;
     }
-    .tech-title:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(90deg, #7c4dff, #ffb74d);
-      border-radius: 3px;
-    }
-    .tech-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-    }
-    .tech-category {
-      background: rgba(35, 25, 15, 0.8);
-      padding: 25px;
-      border-radius: 12px;
-      border-left: 4px solid #7c4dff;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .tech-category:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(124, 77, 255, 0.2);
-    }
-    .tech-category.premium {
-      border-left-color: #ffb74d;
-    }
-    .tech-category.premium:hover {
-      box-shadow: 0 10px 25px rgba(255, 183, 77, 0.2);
-    }
-    .tech-header {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .tech-header img {
-      height: 32px;
-      width: auto;
-    }
-    .tech-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .tech-list li {
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-    }
-    .tech-list li:last-child {
-      border-bottom: none;
-    }
-    .tech-icon {
-      margin-right: 12px;
-      color: #bfa578;
-      font-size: 1.3rem;
-    }
-    .cpu-image {
-      width: 100%;
-      height: 180px;
-      object-fit: contain;
-      border-radius: 8px;
-      margin: 15px 0;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 10px;
-    }
-    .tech-note {
-      margin-top: 30px;
-      text-align: center;
-      font-style: italic;
-      color: #bfa578;
-      font-size: 1rem;
-      padding: 15px;
-      background: rgba(20, 15, 10, 0.5);
-      border-radius: 8px;
-    }
-    .partner-powered {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 1.1rem;
-      color: #fff;
+    #support-modal-content {
+      max-width: 100%;
+      margin: 0 10px 80px 10px;
     }
     .partner-logos {
-      display: flex;
+      gap: 30px;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .hero {
+      min-height: 48vh;
+      padding-bottom: 12vw;
+    }
+    .headline {
+      font-size: 2.3rem;
+    }
+    .subheadline {
+      font-size: 1.08rem;
+    }
+    .countdown {
+      font-size: 1.3rem;
+      gap: 11px;
+    }
+    .count-label {
+      font-size: 0.7rem;
+    }
+    header {
       justify-content: center;
-      gap: 40px;
-      margin-top: 20px;
-      flex-wrap: wrap;
+      padding: 12px 10px;
+    }
+    .tech-section {
+      padding: 30px 15px;
+      margin: 40px auto 30px;
     }
     .partner-logos img {
-      height: 50px;
-      filter: brightness(0.9);
-      transition: filter 0.3s ease;
+      height: 35px;
     }
-    .partner-logos img:hover {
-      filter: brightness(1.2);
-    }
-
-    .partners {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 48px;
-      margin-bottom: 20px;
-    }
-    .partner-logo {
-      height: 48px;
-      filter: brightness(0.8) invert(0.9);
-      transition: filter 0.3s ease;
-    }
-    .partner-logo:hover {
-      filter: brightness(1.1) invert(1);
-    }
-
-    form.newsletter {
-      display: flex;
-      gap: 8px;
-      max-width: 400px;
-      width: 100%;
-      justify-content: center;
-      margin-top: 30px;
-    }
-    form.newsletter input[type="email"] {
-      flex-grow: 1;
-      padding: 10px 16px;
-      border-radius: 24px;
-      border: none;
-      font-size: 1rem;
-      outline: none;
-    }
-    form.newsletter button {
-      background: #7c4dff;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      font-weight: 700;
-      font-size: 1rem;
-      border-radius: 24px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 10px #a682ffcc;
-    }
-    form.newsletter button:hover {
-      background: #a068ff;
-    }
-    .message {
-      color: #b8f2b4;
-      font-weight: 700;
-      margin-top: 16px;
-      min-height: 24px;
-      text-align: center;
-    }
-
-    @media (max-width: 768px) {
-      .tech-grid {
-        grid-template-columns: 1fr;
-      }
-      .tech-category {
-        padding: 20px;
-      }
-      .tech-title {
-        font-size: 2rem;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero { min-height: 48vh; padding-bottom: 12vw; }
-      .headline { font-size: 2.3rem; }
-      .subheadline { font-size: 1.08rem; }
-      .countdown { font-size: 1.3rem; gap: 11px;}
-      .count-label { font-size: 0.7rem; }
-      header {
-        justify-content: center;
-        padding: 12px 10px;
-      }
-      .partners {
-        gap: 20px;
-      }
-      form.newsletter {
-        max-width: 100%;
-        padding: 0 10px;
-        flex-direction: column;
-      }
-      .tech-section {
-        padding: 25px 15px;
-        margin: 40px auto 30px;
-      }
-      .partner-logos {
-        gap: 25px;
-      }
-      .partner-logos img {
-        height: 40px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-
 <header>
   <img class="logo" src="https://i.ibb.co/TxrxHgzK/logo-long.png" alt="OGCRAFTNETWORK Logo" />
 </header>
-
 <section class="hero">
   <div class="overlay"></div>
   <h1 class="headline">Very close</h1>
   <h2 class="subheadline">OGCRAFTNETWORK Launch September 2026</h2>
   <div class="date-info">Worldwide | 18.09.2026 | 18:00 (CEST)</div>
 </section>
-
 <main>
   <div class="lead">
     Get ready for the launch and discover our new hosting experience!
   </div>
-
   <div class="countdown" id="countdown">
     <div class="count-box"><span id="days">00</span> <span class="count-label">Days</span></div>
     <div class="count-box"><span id="hours">00</span> <span class="count-label">Hours</span></div>
     <div class="count-box"><span id="minutes">00</span> <span class="count-label">Minutes</span></div>
-    <div class="count-box"><span id="seconds">00</span> <span class="count-label">Secounds</span></div>
-  </div>
-  <!-- Support Button & Modal -->
-  <button id="support-btn" aria-label="Support" title="Support" style="position:fixed;right:18px;bottom:18px;background:#7c4dff;border:none;color:#fff;padding:12px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(124,77,255,0.25);cursor:pointer;font-weight:700;z-index:9999;">Support</button>
-
-  <div id="support-modal" role="dialog" aria-modal="true" aria-hidden="true" style="position:fixed;left:0;top:0;right:0;bottom:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:9998;">
-    <div id="support-modal-content" style="width:95%;max-width:640px;background:#0a0707;padding:20px;border-radius:12px;border:1px solid rgba(124,77,255,0.12);box-shadow:0 12px 40px rgba(0,0,0,0.6);color:#fff;transform-origin:center center;transform:scale(0.6) translateY(30px);opacity:0;transition:transform 320ms cubic-bezier(.2,.9,.2,1),opacity 260ms ease;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <h3 style="margin:0;font-size:1.15rem;">Support Request</h3>
-        <button id="support-close" aria-label="Close" style="background:transparent;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">✕</button>
-      </div>
-      <p style="color:#d7c9ff;margin:0 0 12px 0;font-size:0.95rem;">Describe your issue. Clicking "Open here" will open your email client in this window with a prefilled message to <code>contact@ogcraftnet.vip</code>. </p>
-      <form id="support-form">
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <input id="support-name" name="name" placeholder="Name" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
-          <input id="support-email" name="email" type="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
-        </div>
-        <input id="support-subject" name="subject" placeholder="Subject" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:8px;" />
-        <textarea id="support-message" name="message" placeholder="Your message" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:10px;"></textarea>
-        <div style="display:flex;gap:8px;justify-content:flex-end;align-items:center;">
-          <button type="button" id="support-cancel" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;">Cancel</button>
-          <button type="submit" id="support-send" style="background:#27a844;border:none;color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700;">Open here</button>
-        </div>
-      </form>
-      </div>
+    <div class="count-box"><span id="seconds">00</span> <span class="count-label">Seconds</span></div>
   </div>
 
-  <!-- New Tech Section -->
+  <!-- Moderne Tech Section -->
   <section class="tech-section">
-    <h2 class="tech-title">Our high-performance technology</h2>
-    
-    <div class="tech-grid">
-      <div class="tech-category">
-        <h3 class="tech-header">
-          ARM & Snapdragon Prozessoren
-        </h3>
-        <img src="https://media.icdn.hu/content/entity/2024/09/76290/66fa634fcc809qualxomm-snapdragon-x-elite-logo.jpg" alt="Snapdragon X Elite" class="cpu-image">
-        <ul class="tech-list">
-          <li><span class="tech-icon">⚡</span> Snapdragon X Elite CPUs</li>
-          <li><span class="tech-icon">⚡</span> Snapdragon X Plus CPUs</li>
-          <li><span class="tech-icon">⚡</span> Energy-efficient ARM architecture</li>
-          <li><span class="tech-icon">⚡</span> Revolutionary AI capabilities</li>
-        </ul>
+    <div class="tech-content">
+      <h2 class="tech-title">Our high-performance technology</h2>
+      <p class="tech-subtitle">Industry-leading hardware for maximum performance</p>
+      
+      <div class="tech-grid">
+        <div class="tech-category">
+          <div class="tech-header">
+            ARM & Snapdragon
+            <span class="tech-badge">Standard</span>
+          </div>
+          <img src="https://media.icdn.hu/content/entity/2024/09/76290/66fa634fcc809qualxomm-snapdragon-x-elite-logo.jpg" alt="Snapdragon X Elite" class="cpu-image">
+          <ul class="tech-list">
+            <li><span class="tech-icon">⚡</span> Snapdragon X Elite CPUs</li>
+            <li><span class="tech-icon">⚡</span> Snapdragon X Plus CPUs</li>
+            <li><span class="tech-icon">⚡</span> Energy-efficient ARM architecture</li>
+            <li><span class="tech-icon">⚡</span> Revolutionary AI capabilities</li>
+          </ul>
+        </div>
+        
+        <div class="tech-category premium">
+          <div class="tech-header">
+            Premium Intel
+            <span class="tech-badge">Premium</span>
+          </div>
+          <img src="https://www.hatchwise.com/wp-content/uploads/2023/03/pasted-image-0-17.png" alt="Intel Prozessor" class="cpu-image">
+          <ul class="tech-list">
+            <li><span class="tech-icon">🔥</span> Intel Core i9-9900K</li>
+            <li><span class="tech-icon">🔥</span> Intel Core i7-12900K</li>
+            <li><span class="tech-icon">🔥</span> Intel Core i9-13900K</li>
+            <li><span class="tech-icon">🔥</span> Maximum single-core performance</li>
+          </ul>
+        </div>
+        
+        <div class="tech-category premium">
+          <div class="tech-header">
+            Premium AMD
+            <span class="tech-badge">Premium</span>
+          </div>
+          <img src="https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/1413018-am5-ryzen.jpg" alt="AMD Prozessor" class="cpu-image">
+          <ul class="tech-list">
+            <li><span class="tech-icon">💎</span> AMD Ryzen 5 5600X</li>
+            <li><span class="tech-icon">💎</span> AMD Ryzen 7 7700X</li>
+            <li><span class="tech-icon">💎</span> AMD Ryzen AI Technologie</li>
+            <li><span class="tech-icon">💎</span> Excellent multi-core performance</li>
+          </ul>
+        </div>
       </div>
       
-      <div class="tech-category premium">
-        <h3 class="tech-header">
-          Premium Intel Optionen
-        </h3>
-        <img src="https://www.hatchwise.com/wp-content/uploads/2023/03/pasted-image-0-17.png" alt="Intel Prozessor" class="cpu-image">
-        <ul class="tech-list">
-          <li><span class="tech-icon">🔥</span> Intel Core i9-9900K</li>
-          <li><span class="tech-icon">🔥</span> Intel Core i7-12900K</li>
-          <li><span class="tech-icon">🔥</span> Intel Core i9-13900K</li>
-          <li><span class="tech-icon">🔥</span> Maximum single-core performance</li>
-        </ul>
-      </div>
+      <p class="tech-note">
+        * Premium processors are available at an additional cost and offer maximum performance for demanding workloads.
+      </p>
       
-      <div class="tech-category premium">
-        <h3 class="tech-header">
-          Premium AMD Optionen
-        </h3>
-        <img src="https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/1413018-am5-ryzen.jpg" alt="AMD Prozessor" class="cpu-image">
-        <ul class="tech-list">
-          <li><span class="tech-icon">💎</span> AMD Ryzen 5 5600X</li>
-          <li><span class="tech-icon">💎</span> AMD Ryzen 7 7700X</li>
-          <li><span class="tech-icon">💎</span> AMD Ryzen AI Technologie</li>
-          <li><span class="tech-icon">💎</span> Excellent multi-core performance</li>
-        </ul>
-      </div>
-    </div>
-    
-    <p class="tech-note">* Premium processors are available at an additional cost and offer maximum performance for demanding workloads.</p>
-    
-    <div class="partner-powered">
-      <p>Powered by our exclusive technology partners:</p>
-      <div class="partner-logos">
-        <img src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Oracle_Logo.svg/1024px-Oracle_Logo.svg.png" alt="Oracle Logo">
+      <div class="partner-section">
+        <div class="partner-title">Powered by our exclusive technology partners</div>
+        <div class="partner-logos">
+          <div class="partner-logo-wrap">
+            <img src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo">
+          </div>
+          <div class="partner-logo-wrap">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Oracle_Logo.svg/1024px-Oracle_Logo.svg.png" alt="Oracle Logo">
+          </div>
+        </div>
       </div>
     </div>
   </section>
+</main>
 
+<!-- CSS Variables Support Button - Container Approach -->
+<div id="support-btn-container">
+  <button id="support-btn" aria-label="Support" title="Support">
+    <span class="btn-text">Support</span>
+    <span class="close-icon">✕</span>
+  </button>
+</div>
 
+<!-- Support Modal -->
+<div id="support-modal" aria-hidden="true">
+  <div id="support-modal-content">
+    <h3 style="margin:0 0 12px 0;font-size:1.15rem;">Support Request</h3>
+    <p style="color:#d7c9ff;margin:0 0 12px 0;font-size:0.95rem;">
+      Describe your issue. Clicking "Send Message" will open your email client with a prefilled message to <code>contact@ogcraftnet.vip</code>.
+    </p>
+    <form id="support-form">
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input id="support-name" placeholder="Name" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
+        <input id="support-email" type="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
+      </div>
+      <input id="support-subject" placeholder="Subject" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:8px;" />
+      <textarea id="support-message" placeholder="Your message" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:10px;resize:vertical;"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button type="submit" style="background:#27a844;border:none;padding:10px 14px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;width:100%;">Send Message</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
-  const target = new Date('2026-09-18T16:00:00Z').getTime();
-  function runCountdown() {
-    const now = new Date().getTime();
-    let diff = Math.max(0, target - now);
-    const d = Math.floor(diff / (1000*60*60*24));
-    const h = Math.floor((diff / (1000*60*60)) % 24);
-    const m = Math.floor((diff / (1000*60)) % 60);
-    const s = Math.floor((diff / 1000) % 60);
-    document.getElementById("days").textContent = String(d).padStart(2,"0");
-    document.getElementById("hours").textContent = String(h).padStart(2,"0");
-    document.getElementById("minutes").textContent = String(m).padStart(2,"0");
-    document.getElementById("seconds").textContent = String(s).padStart(2,"0");
-  }
-  runCountdown();
-  setInterval(runCountdown, 1000);
+const target = new Date('2026-09-18T16:00:00Z').getTime();
+function runCountdown() {
+  const now = new Date().getTime();
+  let diff = Math.max(0, target - now);
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff / (1000*60*60)) % 24);
+  const m = Math.floor((diff / (1000*60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+  document.getElementById("days").textContent = String(d).padStart(2,"0");
+  document.getElementById("hours").textContent = String(h).padStart(2,"0");
+  document.getElementById("minutes").textContent = String(m).padStart(2,"0");
+  document.getElementById("seconds").textContent = String(s).padStart(2,"0");
+}
+runCountdown();
+setInterval(runCountdown, 1000);
 
-  function submitNewsletter(event) {
-    event.preventDefault();
-    const emailInput = document.getElementById('newsletter-email');
-    const messageDiv = document.getElementById('message');
-    if(emailInput.checkValidity()) {
-      // Hier könntest du API-Aufruf oder Mailer-Integration ergänzen
-      messageDiv.textContent = "Danke für deine Anmeldung zum Newsletter!";
-      emailInput.value = "";
-    } else {
-      messageDiv.textContent = "Bitte gib eine gültige E-Mail-Adresse ein.";
-    }
+// CSS Variables + Transform Approach
+const supportBtn = document.getElementById('support-btn');
+const modal = document.getElementById('support-modal');
+const form = document.getElementById('support-form');
+const root = document.documentElement;
+let isAnimating = false;
+
+supportBtn.addEventListener('click', () => {
+  if(isAnimating) return;
+  
+  if(!modal.classList.contains('show')){
+    // Öffnen mit CSS Variables
+    isAnimating = true;
+    
+    // Animate mit CSS Variables
+    root.style.setProperty('--btn-scale', '0.85');
+    root.style.setProperty('--btn-bg', '#ff4444');
+    root.style.setProperty('--btn-shadow', '0 6px 20px rgba(255,68,68,0.5)');
+    root.style.setProperty('--btn-padding', '0');
+    root.style.setProperty('--btn-radius', '50%');
+    
+    supportBtn.classList.add('active');
+    
+    setTimeout(() => {
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      isAnimating = false;
+    }, 300);
+    
+  } else {
+    // Schließen
+    isAnimating = true;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    
+    setTimeout(() => {
+      root.style.setProperty('--btn-scale', '1');
+      root.style.setProperty('--btn-bg', '#7c4dff');
+      root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
+      root.style.setProperty('--btn-padding', '10px 16px');
+      root.style.setProperty('--btn-radius', '50px');
+      
+      supportBtn.classList.remove('active');
+      isAnimating = false;
+    }, 400);
   }
+});
+
+modal.addEventListener('click', (e) => {
+  if(e.target === modal && !isAnimating) {
+    isAnimating = true;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    
+    setTimeout(() => {
+      root.style.setProperty('--btn-scale', '1');
+      root.style.setProperty('--btn-bg', '#7c4dff');
+      root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
+      root.style.setProperty('--btn-padding', '10px 16px');
+      root.style.setProperty('--btn-radius', '50px');
+      
+      supportBtn.classList.remove('active');
+      isAnimating = false;
+    }, 400);
+  }
+});
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('support-name').value.trim();
+  const email = document.getElementById('support-email').value.trim();
+  const subject = document.getElementById('support-subject').value.trim() || 'Support request from website';
+  const message = document.getElementById('support-message').value.trim();
+  if(!message) { 
+    alert('Bitte beschreibe dein Problem!'); 
+    return; 
+  }
+  let body = '';
+  if(name) body += 'Name: ' + name + '\n';
+  if(email) body += 'Email: ' + email + '\n';
+  body += '\n--- Message ---\n' + message + '\n\n--- End ---\n';
+  const to = 'contact@ogcraftnet.vip';
+  window.location.href = 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  
+  if(!isAnimating) {
+    isAnimating = true;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    
+    setTimeout(() => {
+      root.style.setProperty('--btn-scale', '1');
+      root.style.setProperty('--btn-bg', '#7c4dff');
+      root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
+      root.style.setProperty('--btn-padding', '10px 16px');
+      root.style.setProperty('--btn-radius', '50px');
+      
+      supportBtn.classList.remove('active');
+      isAnimating = false;
+    }, 400);
+  }
+});
 </script>
-
-  <script>
-    // Support modal behavior and mailto creation
-    (function(){
-      const btn = document.getElementById('support-btn');
-      const modal = document.getElementById('support-modal');
-      const closeBtn = document.getElementById('support-close');
-      const cancelBtn = document.getElementById('support-cancel');
-      const form = document.getElementById('support-form');
-
-      function openModal(){
-        const content = document.getElementById('support-modal-content');
-        // show backdrop
-        modal.style.display = 'flex';
-        modal.setAttribute('aria-hidden','false');
-        document.body.style.overflow = 'hidden';
-        // compute support button position to animate from
-        try{
-          const btnRect = btn.getBoundingClientRect();
-          const vw = window.innerWidth; const vh = window.innerHeight;
-          // compute transform to place content over button initially
-          const contentRect = content.getBoundingClientRect();
-          const fromX = btnRect.left + btnRect.width/2 - (vw/2);
-          const fromY = btnRect.top + btnRect.height/2 - (vh/2);
-          // set transform origin and initial transform to match button
-          content.style.transformOrigin = 'center center';
-          content.style.transition = 'none';
-          content.style.transform = `translate(${fromX}px, ${fromY}px) scale(0.4)`;
-          content.style.opacity = '0';
-          // force layout then animate to center
-          requestAnimationFrame(()=>{
-            content.style.transition = 'transform 320ms cubic-bezier(.2,.9,.2,1),opacity 260ms ease';
-            content.style.transform = 'translate(0px, 0px) scale(1)';
-            content.style.opacity = '1';
-            const nameInput = document.getElementById('support-name');
-            setTimeout(()=>{ nameInput && nameInput.focus(); }, 260);
-          });
-        }catch(err){
-          // fallback: simple fade/scale
-          content.style.transform = 'scale(0.6) translateY(30px)';
-          requestAnimationFrame(()=>{
-            content.style.transition = 'transform 320ms cubic-bezier(.2,.9,.2,1),opacity 260ms ease';
-            content.style.transform = 'translate(0px,0px) scale(1)';
-            content.style.opacity = '1';
-          });
-        }
-      }
-      function closeModal(){
-        const content = document.getElementById('support-modal-content');
-        // animate back to button
-        try{
-          const btnRect = btn.getBoundingClientRect();
-          const vw = window.innerWidth; const vh = window.innerHeight;
-          const fromX = btnRect.left + btnRect.width/2 - (vw/2);
-          const fromY = btnRect.top + btnRect.height/2 - (vh/2);
-          content.style.transition = 'transform 240ms cubic-bezier(.2,.9,.2,1),opacity 200ms ease';
-          content.style.transform = `translate(${fromX}px, ${fromY}px) scale(0.4)`;
-          content.style.opacity = '0';
-          setTimeout(()=>{ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }, 260);
-        }catch(err){
-          content.style.opacity = '0';
-          setTimeout(()=>{ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }, 260);
-        }
-      }
-
-      btn && btn.addEventListener('click', openModal);
-      closeBtn && closeBtn.addEventListener('click', closeModal);
-      cancelBtn && cancelBtn.addEventListener('click', closeModal);
-      modal && modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
-
-  // No popout — only in-window mailto
-
-      function buildMailto(){
-        const name = document.getElementById('support-name').value.trim();
-        const email = document.getElementById('support-email').value.trim();
-        const subject = document.getElementById('support-subject').value.trim() || 'Support request from website';
-        const message = document.getElementById('support-message').value.trim();
-        if(!message){
-          alert('Please describe your issue.');
-          return null;
-        }
-        let body = '';
-        if(name) body += 'Name: ' + name + '\n';
-        if(email) body += 'Email: ' + email + '\n';
-        body += '\n--- Message ---\n' + message + '\n\n--- End ---\n';
-        const to = 'contact@ogcraftnet.vip';
-        return 'mailto:' + encodeURIComponent(to)
-          + '?subject=' + encodeURIComponent(subject)
-          + '&body=' + encodeURIComponent(body);
-      }
-
-      // Open here (in same window) on submit
-      form && form.addEventListener('submit', function(e){
-        e.preventDefault();
-        const mailto = buildMailto();
-        if(!mailto) return;
-        // Open mail client in same window/tab
-        window.location.href = mailto;
-        closeModal();
-      });
-
-      // No popout handler — sending opens mail client in same window
-    })();
-  </script>
-
-
 </body>
 </html>
