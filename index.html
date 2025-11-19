@@ -1,743 +1,857 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>OGCRAFTNETWORK – Launch Event 2026</title>
-<style>
-  :root {
-    --btn-scale: 1;
-    --btn-bg: #7c4dff;
-    --btn-shadow: 0 4px 12px rgba(124,77,255,0.4);
-    --btn-padding: 10px 16px;
-    --btn-radius: 50px;
-  }
-  
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #070202;
-    color: #fff;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    overflow-x: hidden;
-  }
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: radial-gradient(ellipse 80% 40% at 50% 15%, #442f16aa 15%, #070202 65%) no-repeat;
-  }
-  header {
-    display: flex;
-    align-items: center;
-    padding: 10px 30px;
-  }
-  header img.logo {
-    height: 48px;
-    object-fit: contain;
-  }
-  .hero {
-    position: relative;
-    width: 100vw;
-    min-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    padding-bottom: 6vh;
-    background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
-  }
-  .overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse 80% 40% at 50% 30%, #1b0a02c5 35%, #070202ee 100%);
-    z-index: 1;
-  }
-  .headline, .subheadline, .date-info {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    width: 100%;
-    margin: 0;
-  }
-  .headline {
-    font-size: clamp(2.5rem,9vw,6rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    margin-bottom: 12px;
-    margin-top: 8vh;
-    line-height: 1.06;
-    color: #fff;
-    text-shadow: 0 8px 24px #000a;
-  }
-  .subheadline {
-    font-size: 1.55rem;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: #fff8;
-    letter-spacing: 0.01em;
-  }
-  .date-info {
-    font-size: 1.1rem;
-    color: #e0cdae;
-    margin-bottom: 36px;
-    letter-spacing: 0.02em;
-  }
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #070202;
-    padding: 0 20px 60px 20px;
-  }
-  .lead {
-    text-align: center;
-    margin: 16px auto 30px auto;
-    font-size: 1.1rem;
-    letter-spacing: 0.01em;
-    color: #fffde7;
-    font-weight: 600;
-    max-width: 600px;
-  }
-  .countdown {
-    display: flex;
-    gap: 26px;
-    margin: 2rem auto 3rem auto;
-    justify-content: center;
-    font-size: 2.6rem;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-  }
-  .count-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 65px;
-  }
-  .count-label {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #bfa578;
-    margin-top: 0.5em;
-    letter-spacing: 0.02em;
-    text-shadow: 0 2px 10px #000b;
-  }
-  /* Moderne Tech Section */
-  .tech-section {
-    width: 100%;
-    max-width: 1300px;
-    margin: 60px auto 40px;
-    padding: 60px 40px;
-    position: relative;
-    overflow: hidden;
-  }
-  .tech-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(124, 77, 255, 0.05) 0%, rgba(255, 183, 77, 0.05) 100%);
-    border-radius: 24px;
-    z-index: 0;
-  }
-  .tech-section::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(10, 7, 7, 0.85);
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    border: 1px solid rgba(124, 77, 255, 0.2);
-    z-index: 0;
-  }
-  .tech-content {
-    position: relative;
-    z-index: 1;
-  }
-  .tech-title {
-    text-align: center;
-    font-size: 2.8rem;
-    font-weight: 800;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #fff 0%, #e0cdae 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.02em;
-  }
-  .tech-subtitle {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #bfa578;
-    margin-bottom: 50px;
-    font-weight: 400;
-  }
-  .tech-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-    margin-bottom: 40px;
-  }
-  .tech-category {
-    background: linear-gradient(135deg, rgba(124, 77, 255, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
-    padding: 30px;
-    border-radius: 16px;
-    border: 1px solid rgba(124, 77, 255, 0.2);
-    backdrop-filter: blur(10px);
-    transition: all 0.4s cubic-bezier(.2,.9,.2,1);
-    position: relative;
-    overflow: hidden;
-  }
-  .tech-category::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
-    transition: left 0.5s ease;
-  }
-  .tech-category:hover::before {
-    left: 100%;
-  }
-  .tech-category:hover {
-    transform: translateY(-8px);
-    border-color: rgba(124, 77, 255, 0.5);
-    box-shadow: 0 20px 40px rgba(124, 77, 255, 0.2);
-  }
-  .tech-category.premium {
-    background: linear-gradient(135deg, rgba(255, 183, 77, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
-    border-color: rgba(255, 183, 77, 0.2);
-  }
-  .tech-category.premium::before {
-    background: linear-gradient(90deg, transparent, rgba(255, 183, 77, 0.1), transparent);
-  }
-  .tech-category.premium:hover {
-    border-color: rgba(255, 183, 77, 0.5);
-    box-shadow: 0 20px 40px rgba(255, 183, 77, 0.2);
-  }
-  .tech-header {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .tech-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: rgba(124, 77, 255, 0.2);
-    color: #a68dff;
-    border: 1px solid rgba(124, 77, 255, 0.3);
-    margin-left: auto;
-  }
-  .tech-category.premium .tech-badge {
-    background: rgba(255, 183, 77, 0.2);
-    color: #ffb74d;
-    border-color: rgba(255, 183, 77, 0.3);
-  }
-  .cpu-image {
-    width: 100%;
-    height: 160px;
-    object-fit: contain;
-    border-radius: 12px;
-    margin: 20px 0;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 15px;
-    transition: transform 0.3s ease;
-  }
-  .tech-category:hover .cpu-image {
-    transform: scale(1.05);
-  }
-  .tech-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .tech-list li {
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    font-size: 0.95rem;
-    color: #e0e0e0;
-    transition: all 0.2s ease;
-  }
-  .tech-list li:hover {
-    padding-left: 8px;
-    color: #fff;
-  }
-  .tech-list li:last-child {
-    border-bottom: none;
-  }
-  .tech-icon {
-    margin-right: 12px;
-    font-size: 1.2rem;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-  }
-  .tech-note {
-    text-align: center;
-    font-style: italic;
-    color: #bfa578;
-    font-size: 0.95rem;
-    padding: 20px;
-    background: rgba(20, 15, 10, 0.4);
-    border-radius: 12px;
-    border: 1px solid rgba(124, 77, 255, 0.1);
-    margin-bottom: 40px;
-  }
-  .partner-section {
-    text-align: center;
-    padding: 40px 30px;
-    background: rgba(20, 15, 10, 0.4);
-    border-radius: 16px;
-    border: 1px solid rgba(124, 77, 255, 0.1);
-  }
-  .partner-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    color: #fff;
-  }
-  .partner-logos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-    flex-wrap: wrap;
-  }
-  .partner-logo-wrap {
-    padding: 20px 30px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
-  }
-  .partner-logo-wrap:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(124, 77, 255, 0.3);
-    transform: translateY(-5px);
-  }
-  .partner-logos img {
-    height: 45px;
-    filter: brightness(0.85) saturate(0.8);
-    transition: filter 0.3s ease;
-  }
-  .partner-logo-wrap:hover img {
-    filter: brightness(1.1) saturate(1);
-  }
-  
-  /* CSS Variables Support Button - BUG-FREI! */
-  #support-btn-container {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 10001;
-  }
-  
-  #support-btn {
-    background: var(--btn-bg);
-    border: none;
-    color: #fff;
-    padding: var(--btn-padding);
-    border-radius: var(--btn-radius);
-    box-shadow: var(--btn-shadow);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 48px;
-    min-height: 48px;
-    transform: scale(var(--btn-scale));
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-  }
-  
-  #support-btn:hover:not(.active) {
-    transform: scale(1.08);
-    box-shadow: 0 6px 20px rgba(124,77,255,0.6);
-  }
-  
-  #support-btn .btn-text {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    opacity: 1;
-    white-space: nowrap;
-  }
-  
-  #support-btn.active .btn-text {
-    opacity: 0;
-    transform: scale(0.5) rotate(90deg);
-  }
-  
-  #support-btn .close-icon {
-    position: absolute;
-    opacity: 0;
-    font-size: 1.3rem;
-    font-weight: 300;
-    transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
-    transform: scale(0) rotate(-90deg);
-  }
-  
-  #support-btn.active .close-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-  
-  /* Modal */
-  #support-modal {
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0);
-    z-index: 10000;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    pointer-events: none;
-    transition: background 0.4s ease;
-  }
-  
-  #support-modal.show {
-    pointer-events: auto;
-    background: rgba(0,0,0,0.65);
-  }
-  
-  #support-modal-content {
-    background: #0a0707;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(124,77,255,0.2);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    color: #fff;
-    width: 90%;
-    max-width: 420px;
-    margin: 0 20px 90px 20px;
-    opacity: 0;
-    transform: scale(0.85) translateY(20px);
-    transform-origin: bottom right;
-    transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  
-  #support-modal.show #support-modal-content {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  
-  @media (max-width: 768px) {
-    .tech-grid {
-      grid-template-columns: 1fr;
-    }
-    .tech-section {
-      padding: 40px 20px;
-    }
-    .tech-title {
-      font-size: 2rem;
-    }
-    #support-modal-content {
-      max-width: 100%;
-      margin: 0 10px 80px 10px;
-    }
-    .partner-logos {
-      gap: 30px;
-    }
-  }
-  
-  @media (max-width: 640px) {
-    .hero {
-      min-height: 48vh;
-      padding-bottom: 12vw;
-    }
-    .headline {
-      font-size: 2.3rem;
-    }
-    .subheadline {
-      font-size: 1.08rem;
-    }
-    .countdown {
-      font-size: 1.3rem;
-      gap: 11px;
-    }
-    .count-label {
-      font-size: 0.7rem;
-    }
-    header {
-      justify-content: center;
-      padding: 12px 10px;
-    }
-    .tech-section {
-      padding: 30px 15px;
-      margin: 40px auto 30px;
-    }
-    .partner-logos img {
-      height: 35px;
-    }
-  }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OGCRAFTNETWORK – Launch Event 2026</title>
+    <style>
+        :root {
+            --btn-scale: 1;
+            --btn-bg: #7c4dff;
+            --btn-shadow: 0 4px 12px rgba(124,77,255,0.4);
+            --btn-padding: 10px 16px;
+            --btn-radius: 50px;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #070202;
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: radial-gradient(ellipse 80% 40% at 50% 15%, #442f16aa 15%, #070202 65%) no-repeat;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px 30px;
+        }
+        header img.logo {
+            height: 48px;
+            object-fit: contain;
+        }
+        .hero {
+            position: relative;
+            width: 100vw;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 6vh;
+            background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+        }
+        .overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse 80% 40% at 50% 30%, #1b0a02c5 35%, #070202ee 100%);
+            z-index: 1;
+        }
+        .headline, .subheadline, .date-info {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            margin: 0;
+        }
+        .headline {
+            font-size: clamp(2.5rem,9vw,6rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+            margin-top: 8vh;
+            line-height: 1.06;
+            color: #fff;
+            text-shadow: 0 8px 24px #000a;
+        }
+        .subheadline {
+            font-size: 1.55rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #fff8;
+            letter-spacing: 0.01em;
+        }
+        .date-info {
+            font-size: 1.1rem;
+            color: #e0cdae;
+            margin-bottom: 36px;
+            letter-spacing: 0.02em;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #070202;
+            padding: 0 20px 60px 20px;
+        }
+        .lead {
+            text-align: center;
+            margin: 16px auto 30px auto;
+            font-size: 1.1rem;
+            letter-spacing: 0.01em;
+            color: #fffde7;
+            font-weight: 600;
+            max-width: 600px;
+        }
+        .countdown {
+            display: flex;
+            gap: 26px;
+            margin: 2rem auto 3rem auto;
+            justify-content: center;
+            font-size: 2.6rem;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+        }
+        .count-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 65px;
+        }
+        .count-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #bfa578;
+            margin-top: 0.5em;
+            letter-spacing: 0.02em;
+            text-shadow: 0 2px 10px #000b;
+        }
+        /* Moderne Tech Section */
+        .tech-section {
+            width: 100%;
+            max-width: 1300px;
+            margin: 60px auto 40px;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .tech-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.05) 0%, rgba(255, 183, 77, 0.05) 100%);
+            border-radius: 24px;
+            z-index: 0;
+        }
+        .tech-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 7, 7, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            z-index: 0;
+        }
+        .tech-content {
+            position: relative;
+            z-index: 1;
+        }
+        .tech-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #e0cdae 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+        .tech-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #bfa578;
+            margin-bottom: 50px;
+            font-weight: 400;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        .tech-category {
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(.2,.9,.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .tech-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .tech-category:hover::before {
+            left: 100%;
+        }
+        .tech-category:hover {
+            transform: translateY(-8px);
+            border-color: rgba(124, 77, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(124, 77, 255, 0.2);
+        }
+        .tech-category.premium {
+            background: linear-gradient(135deg, rgba(255, 183, 77, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
+            border-color: rgba(255, 183, 77, 0.2);
+        }
+        .tech-category.premium::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 183, 77, 0.1), transparent);
+        }
+        .tech-category.premium:hover {
+            border-color: rgba(255, 183, 77, 0.5);
+            box-shadow: 0 20px 40px rgba(255, 183, 77, 0.2);
+        }
+        .tech-header {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tech-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(124, 77, 255, 0.2);
+            color: #a68dff;
+            border: 1px solid rgba(124, 77, 255, 0.3);
+            margin-left: auto;
+        }
+        .tech-category.premium .tech-badge {
+            background: rgba(255, 183, 77, 0.2);
+            color: #ffb74d;
+            border-color: rgba(255, 183, 77, 0.3);
+        }
+        .cpu-image {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            transition: transform 0.3s ease;
+        }
+        .tech-category:hover .cpu-image {
+            transform: scale(1.05);
+        }
+        .tech-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tech-list li {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            transition: all 0.2s ease;
+        }
+        .tech-list li:hover {
+            padding-left: 8px;
+            color: #fff;
+        }
+        .tech-list li:last-child {
+            border-bottom: none;
+        }
+        .tech-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .tech-note {
+            text-align: center;
+            font-style: italic;
+            color: #bfa578;
+            font-size: 0.95rem;
+            padding: 20px;
+            background: rgba(20, 15, 10, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(124, 77, 255, 0.1);
+            margin-bottom: 40px;
+        }
+        .partner-section {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(20, 15, 10, 0.4);
+            border-radius: 16px;
+            border: 1px solid rgba(124, 77, 255, 0.1);
+        }
+        .partner-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .partner-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .partner-logo-wrap {
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .partner-logo-wrap:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(124, 77, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        .partner-logos img {
+            height: 45px;
+            filter: brightness(0.85) saturate(0.8);
+            transition: filter 0.3s ease;
+        }
+        .partner-logo-wrap:hover img {
+            filter: brightness(1.1) saturate(1);
+        }
+
+        /* CSS Variables Support Button - BUG-FREI! */
+        #support-btn-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 10001;
+        }
+
+        #support-btn {
+            background: var(--btn-bg);
+            border: none;
+            color: #fff;
+            padding: var(--btn-padding);
+            border-radius: var(--btn-radius);
+            box-shadow: var(--btn-shadow);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 48px;
+            min-height: 48px;
+            transform: scale(var(--btn-scale));
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        #support-btn:hover:not(.active) {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(124,77,255,0.6);
+        }
+
+        #support-btn .btn-text {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 1;
+            white-space: nowrap;
+        }
+
+        #support-btn.active .btn-text {
+            opacity: 0;
+            transform: scale(0.5) rotate(90deg);
+        }
+
+        #support-btn .close-icon {
+            position: absolute;
+            opacity: 0;
+            font-size: 1.3rem;
+            font-weight: 300;
+            transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+            transform: scale(0) rotate(-90deg);
+        }
+
+        #support-btn.active .close-icon {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* Modal */
+        #support-modal {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0);
+            z-index: 10000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            pointer-events: none;
+            transition: background 0.4s ease;
+        }
+
+        #support-modal.show {
+            pointer-events: auto;
+            background: rgba(0,0,0,0.65);
+        }
+
+        #support-modal-content {
+            background: #0a0707;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(124,77,255,0.2);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            color: #fff;
+            width: 90%;
+            max-width: 420px;
+            margin: 0 20px 90px 20px;
+            opacity: 0;
+            transform: scale(0.85) translateY(20px);
+            transform-origin: bottom right;
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+            transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #support-modal.show #support-modal-content {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Footer */
+        .site-footer {
+            width: 100%;
+            padding: 32px 20px;
+            background: rgba(20, 15, 10, 0.4);
+            border-top: 1px solid rgba(124, 77, 255, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+        .site-footer .footer-inner {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+        .social-link:hover {
+            transform: translateY(-2px);
+            background: rgba(124, 77, 255, 0.12);
+            border-color: rgba(124, 77, 255, 0.4);
+        }
+        .social-link .social-icon {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+        .credits {
+            color: #bfa578;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+
+        /* Footer */
+        .site-footer {
+            width: 100%;
+            padding: 32px 20px;
+            background: rgba(20, 15, 10, 0.4);
+            border-top: 1px solid rgba(124, 77, 255, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+        .site-footer .footer-inner {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+        .social-link:hover {
+            transform: translateY(-2px);
+            background: rgba(124, 77, 255, 0.12);
+            border-color: rgba(124, 77, 255, 0.4);
+        }
+        .credits {
+            color: #bfa578;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 768px) {
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            .tech-section {
+                padding: 40px 20px;
+            }
+            .tech-title {
+                font-size: 2rem;
+            }
+            #support-modal-content {
+                max-width: 100%;
+                margin: 0 10px 80px 10px;
+            }
+            .partner-logos {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero {
+                min-height: 48vh;
+                padding-bottom: 12vw;
+            }
+            .headline {
+                font-size: 2.3rem;
+            }
+            .subheadline {
+                font-size: 1.08rem;
+            }
+            .countdown {
+                font-size: 1.3rem;
+                gap: 11px;
+            }
+            .count-label {
+                font-size: 0.7rem;
+            }
+            header {
+                justify-content: center;
+                padding: 12px 10px;
+            }
+            .tech-section {
+                padding: 30px 15px;
+                margin: 40px auto 30px;
+            }
+            .partner-logos img {
+                height: 35px;
+            }
+        }
+    </style>
 </head>
 <body>
 <header>
-  <img class="logo" src="https://i.ibb.co/TxrxHgzK/logo-long.png" alt="OGCRAFTNETWORK Logo" />
+    <img class="logo" src="https://i.ibb.co/TxrxHgzK/logo-long.png" alt="OGCRAFTNETWORK Logo" />
 </header>
 <section class="hero">
-  <div class="overlay"></div>
-  <h1 class="headline">Very close</h1>
-  <h2 class="subheadline">OGCRAFTNETWORK Launch September 2026</h2>
-  <div class="date-info">Worldwide | 18.09.2026 | 18:00 (CEST)</div>
+    <div class="overlay"></div>
+    <h1 class="headline">Very close</h1>
+    <h2 class="subheadline">OGCRAFTNETWORK Launch September 2026</h2>
+    <div class="date-info">Worldwide | 18.09.2026 | 18:00 (CEST)</div>
 </section>
 <main>
-  <div class="lead">
-    Get ready for the launch and discover our new hosting experience!
-  </div>
-  <div class="countdown" id="countdown">
-    <div class="count-box"><span id="days">00</span> <span class="count-label">Days</span></div>
-    <div class="count-box"><span id="hours">00</span> <span class="count-label">Hours</span></div>
-    <div class="count-box"><span id="minutes">00</span> <span class="count-label">Minutes</span></div>
-    <div class="count-box"><span id="seconds">00</span> <span class="count-label">Seconds</span></div>
-  </div>
-
-  <!-- Moderne Tech Section -->
-  <section class="tech-section">
-    <div class="tech-content">
-      <h2 class="tech-title">Our high-performance technology</h2>
-      <p class="tech-subtitle">Industry-leading hardware for maximum performance</p>
-      
-      <div class="tech-grid">
-        <div class="tech-category">
-          <div class="tech-header">
-            ARM & Snapdragon
-            <span class="tech-badge">Standard</span>
-          </div>
-          <img src="https://media.icdn.hu/content/entity/2024/09/76290/66fa634fcc809qualxomm-snapdragon-x-elite-logo.jpg" alt="Snapdragon X Elite" class="cpu-image">
-          <ul class="tech-list">
-            <li><span class="tech-icon">⚡</span> Snapdragon X Elite CPUs</li>
-            <li><span class="tech-icon">⚡</span> Snapdragon X Plus CPUs</li>
-            <li><span class="tech-icon">⚡</span> Energy-efficient ARM architecture</li>
-            <li><span class="tech-icon">⚡</span> Revolutionary AI capabilities</li>
-          </ul>
-        </div>
-        
-        <div class="tech-category premium">
-          <div class="tech-header">
-            Premium Intel
-            <span class="tech-badge">Premium</span>
-          </div>
-          <img src="https://www.hatchwise.com/wp-content/uploads/2023/03/pasted-image-0-17.png" alt="Intel Prozessor" class="cpu-image">
-          <ul class="tech-list">
-            <li><span class="tech-icon">🔥</span> Intel Core i9-9900K</li>
-            <li><span class="tech-icon">🔥</span> Intel Core i7-12900K</li>
-            <li><span class="tech-icon">🔥</span> Intel Core i9-13900K</li>
-            <li><span class="tech-icon">🔥</span> Maximum single-core performance</li>
-          </ul>
-        </div>
-        
-        <div class="tech-category premium">
-          <div class="tech-header">
-            Premium AMD
-            <span class="tech-badge">Premium</span>
-          </div>
-          <img src="https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/1413018-am5-ryzen.jpg" alt="AMD Prozessor" class="cpu-image">
-          <ul class="tech-list">
-            <li><span class="tech-icon">💎</span> AMD Ryzen 5 5600X</li>
-            <li><span class="tech-icon">💎</span> AMD Ryzen 7 7700X</li>
-            <li><span class="tech-icon">💎</span> AMD Ryzen AI Technologie</li>
-            <li><span class="tech-icon">💎</span> Excellent multi-core performance</li>
-          </ul>
-        </div>
-      </div>
-      
-      <p class="tech-note">
-        * Premium processors are available at an additional cost and offer maximum performance for demanding workloads.
-      </p>
-      
-      <div class="partner-section">
-        <div class="partner-title">Powered by our exclusive technology partners</div>
-        <div class="partner-logos">
-          <div class="partner-logo-wrap">
-            <img src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo">
-          </div>
-          <div class="partner-logo-wrap">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Oracle_Logo.svg/1024px-Oracle_Logo.svg.png" alt="Oracle Logo">
-          </div>
-        </div>
-      </div>
+    <div class="lead">
+        Get ready for the launch and discover our new hosting experience!
     </div>
-  </section>
+    <div class="countdown" id="countdown">
+        <div class="count-box"><span id="days">00</span> <span class="count-label">Days</span></div>
+        <div class="count-box"><span id="hours">00</span> <span class="count-label">Hours</span></div>
+        <div class="count-box"><span id="minutes">00</span> <span class="count-label">Minutes</span></div>
+        <div class="count-box"><span id="seconds">00</span> <span class="count-label">Seconds</span></div>
+    </div>
+
+    <!-- Moderne Tech Section -->
+    <section class="tech-section">
+        <div class="tech-content">
+            <h2 class="tech-title">Our high-performance technology</h2>
+            <p class="tech-subtitle">Industry-leading hardware for maximum performance</p>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <div class="tech-header">
+                        ARM & Snapdragon
+                        <span class="tech-badge">Standard</span>
+                    </div>
+                    <img src="https://media.icdn.hu/content/entity/2024/09/76290/66fa634fcc809qualxomm-snapdragon-x-elite-logo.jpg" alt="Snapdragon X Elite" class="cpu-image">
+                    <ul class="tech-list">
+                        <li><span class="tech-icon">⚡</span> Snapdragon X Elite CPUs</li>
+                        <li><span class="tech-icon">⚡</span> Snapdragon X Plus CPUs</li>
+                        <li><span class="tech-icon">⚡</span> Energy-efficient ARM architecture</li>
+                        <li><span class="tech-icon">⚡</span> Revolutionary AI capabilities</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category premium">
+                    <div class="tech-header">
+                        Premium Intel
+                        <span class="tech-badge">Premium</span>
+                    </div>
+                    <img src="https://www.hatchwise.com/wp-content/uploads/2023/03/pasted-image-0-17.png" alt="Intel Prozessor" class="cpu-image">
+                    <ul class="tech-list">
+                        <li><span class="tech-icon">🔥</span> Intel Core i9-9900K</li>
+                        <li><span class="tech-icon">🔥</span> Intel Core i7-12900K</li>
+                        <li><span class="tech-icon">🔥</span> Intel Core i9-13900K</li>
+                        <li><span class="tech-icon">🔥</span> Maximum single-core performance</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category premium">
+                    <div class="tech-header">
+                        Premium AMD
+                        <span class="tech-badge">Premium</span>
+                    </div>
+                    <img src="https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/1413018-am5-ryzen.jpg" alt="AMD Prozessor" class="cpu-image">
+                    <ul class="tech-list">
+                        <li><span class="tech-icon">💎</span> AMD Ryzen 5 5600X</li>
+                        <li><span class="tech-icon">💎</span> AMD Ryzen 7 7700X</li>
+                        <li><span class="tech-icon">💎</span> AMD Ryzen AI Technologie</li>
+                        <li><span class="tech-icon">💎</span> Excellent multi-core performance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="tech-note">
+                * Premium processors are available at an additional cost and offer maximum performance for demanding workloads.
+            </p>
+
+            <div class="partner-section">
+                <div class="partner-title">Powered by our exclusive technology partners</div>
+                <div class="partner-logos">
+                    <div class="partner-logo-wrap">
+                        <img src="https://www.eco.de/wp-content/uploads/2018/02/anexia_logo_rgb.jpg" alt="Anexia Logo">
+                    </div>
+                    <div class="partner-logo-wrap">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Oracle_Logo.svg/1024px-Oracle_Logo.svg.png" alt="Oracle Logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
+<footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+        <div class="social-links" aria-label="Social Media">
+            <a class="social-link tiktok" href="https://tiktok.com/@ogcraftnet" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <img class="social-icon" src="https://cdn.simpleicons.org/tiktok/FFFFFF" alt="">
+            </a>
+            <a class="social-link discord" href="https://discord.ogcraftnet.vip" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+                <img class="social-icon" src="https://cdn.simpleicons.org/discord/FFFFFF" alt="">
+            </a>
+            <a class="social-link youtube" href="https://www.youtube.com/@OGCRAFTNETSTUDIOS" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <img class="social-icon" src="https://cdn.simpleicons.org/youtube/FFFFFF" alt="">
+            </a>
+            <a class="social-link curseforge" href="https://www.curseforge.com/members/ogcraftnet_studios_austria" target="_blank" rel="noopener noreferrer" aria-label="CurseForge">
+                <img class="social-icon" src="https://cdn.simpleicons.org/curseforge/FFFFFF" alt="">
+            </a>
+
+        </div>
+        <div class="credits">by OGCRAFTNET STUDIOS</div>
+    </div>
+</footer>
+
 
 <!-- CSS Variables Support Button - Container Approach -->
 <div id="support-btn-container">
-  <button id="support-btn" aria-label="Support" title="Support">
-    <span class="btn-text">Support</span>
-    <span class="close-icon">✕</span>
-  </button>
+    <button id="support-btn" aria-label="Support" title="Support">
+        <span class="btn-text">Support</span>
+        <span class="close-icon">✕</span>
+    </button>
 </div>
 
 <!-- Support Modal -->
 <div id="support-modal" aria-hidden="true">
-  <div id="support-modal-content">
-    <h3 style="margin:0 0 12px 0;font-size:1.15rem;">Support Request</h3>
-    <p style="color:#d7c9ff;margin:0 0 12px 0;font-size:0.95rem;">
-      Describe your issue. Clicking "Send Message" will open your email client with a prefilled message to <code>contact@ogcraftnet.vip</code>.
-    </p>
-    <form id="support-form">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <input id="support-name" placeholder="Name" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
-        <input id="support-email" type="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
-      </div>
-      <input id="support-subject" placeholder="Subject" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:8px;" />
-      <textarea id="support-message" placeholder="Your message" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:10px;resize:vertical;"></textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end;">
-        <button type="submit" style="background:#27a844;border:none;padding:10px 14px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;width:100%;">Send Message</button>
-      </div>
-    </form>
-  </div>
+    <div id="support-modal-content">
+        <h3 style="margin:0 0 12px 0;font-size:1.15rem;">Support Request</h3>
+        <p style="color:#d7c9ff;margin:0 0 12px 0;font-size:0.95rem;">
+            Describe your issue. Clicking "Send Message" will open your email client with a prefilled message to <code>contact@ogcraftnet.vip</code>.
+        </p>
+        <form id="support-form">
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+                <input id="support-name" placeholder="Name" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
+                <input id="support-email" type="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;" />
+            </div>
+            <input id="support-subject" placeholder="Subject" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:8px;" />
+            <textarea id="support-message" placeholder="Your message" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#070202;color:#fff;outline:none;margin-bottom:10px;resize:vertical;"></textarea>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+                <button type="submit" style="background:#27a844;border:none;padding:10px 14px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;width:100%;">Send Message</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-const target = new Date('2026-09-18T16:00:00Z').getTime();
-function runCountdown() {
-  const now = new Date().getTime();
-  let diff = Math.max(0, target - now);
-  const d = Math.floor(diff / (1000*60*60*24));
-  const h = Math.floor((diff / (1000*60*60)) % 24);
-  const m = Math.floor((diff / (1000*60)) % 60);
-  const s = Math.floor((diff / 1000) % 60);
-  document.getElementById("days").textContent = String(d).padStart(2,"0");
-  document.getElementById("hours").textContent = String(h).padStart(2,"0");
-  document.getElementById("minutes").textContent = String(m).padStart(2,"0");
-  document.getElementById("seconds").textContent = String(s).padStart(2,"0");
-}
-runCountdown();
-setInterval(runCountdown, 1000);
+    const target = new Date('2026-09-18T16:00:00Z').getTime();
+    function runCountdown() {
+        const now = new Date().getTime();
+        let diff = Math.max(0, target - now);
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff / (1000*60*60)) % 24);
+        const m = Math.floor((diff / (1000*60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        document.getElementById("days").textContent = String(d).padStart(2,"0");
+        document.getElementById("hours").textContent = String(h).padStart(2,"0");
+        document.getElementById("minutes").textContent = String(m).padStart(2,"0");
+        document.getElementById("seconds").textContent = String(s).padStart(2,"0");
+    }
+    runCountdown();
+    setInterval(runCountdown, 1000);
 
-// CSS Variables + Transform Approach
-const supportBtn = document.getElementById('support-btn');
-const modal = document.getElementById('support-modal');
-const form = document.getElementById('support-form');
-const root = document.documentElement;
-let isAnimating = false;
+    // CSS Variables + Transform Approach
+    const supportBtn = document.getElementById('support-btn');
+    const modal = document.getElementById('support-modal');
+    const form = document.getElementById('support-form');
+    const root = document.documentElement;
+    let isAnimating = false;
 
-supportBtn.addEventListener('click', () => {
-  if(isAnimating) return;
-  
-  if(!modal.classList.contains('show')){
-    // Öffnen mit CSS Variables
-    isAnimating = true;
-    
-    // Animate mit CSS Variables
-    root.style.setProperty('--btn-scale', '0.85');
-    root.style.setProperty('--btn-bg', '#ff4444');
-    root.style.setProperty('--btn-shadow', '0 6px 20px rgba(255,68,68,0.5)');
-    root.style.setProperty('--btn-padding', '0');
-    root.style.setProperty('--btn-radius', '50%');
-    
-    supportBtn.classList.add('active');
-    
-    setTimeout(() => {
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      isAnimating = false;
-    }, 300);
-    
-  } else {
-    // Schließen
-    isAnimating = true;
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    
-    setTimeout(() => {
-      root.style.setProperty('--btn-scale', '1');
-      root.style.setProperty('--btn-bg', '#7c4dff');
-      root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
-      root.style.setProperty('--btn-padding', '10px 16px');
-      root.style.setProperty('--btn-radius', '50px');
-      
-      supportBtn.classList.remove('active');
-      isAnimating = false;
-    }, 400);
-  }
-});
+    supportBtn.addEventListener('click', () => {
+        if(isAnimating) return;
 
-modal.addEventListener('click', (e) => {
-  if(e.target === modal && !isAnimating) {
-    isAnimating = true;
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    
-    setTimeout(() => {
-      root.style.setProperty('--btn-scale', '1');
-      root.style.setProperty('--btn-bg', '#7c4dff');
-      root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
-      root.style.setProperty('--btn-padding', '10px 16px');
-      root.style.setProperty('--btn-radius', '50px');
-      
-      supportBtn.classList.remove('active');
-      isAnimating = false;
-    }, 400);
-  }
-});
+        if(!modal.classList.contains('show')){
+            // Öffnen mit CSS Variables
+            isAnimating = true;
 
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  const name = document.getElementById('support-name').value.trim();
-  const email = document.getElementById('support-email').value.trim();
-  const subject = document.getElementById('support-subject').value.trim() || 'Support request from website';
-  const message = document.getElementById('support-message').value.trim();
-  if(!message) { 
-    alert('Bitte beschreibe dein Problem!'); 
-    return; 
-  }
-  let body = '';
-  if(name) body += 'Name: ' + name + '\n';
-  if(email) body += 'Email: ' + email + '\n';
-  body += '\n--- Message ---\n' + message + '\n\n--- End ---\n';
-  const to = 'contact@ogcraftnet.vip';
-  window.location.href = 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-  
-  if(!isAnimating) {
-    isAnimating = true;
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    
-    setTimeout(() => {
-      root.style.setProperty('--btn-scale', '1');
-      root.style.setProperty('--btn-bg', '#7c4dff');
-      root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
-      root.style.setProperty('--btn-padding', '10px 16px');
-      root.style.setProperty('--btn-radius', '50px');
-      
-      supportBtn.classList.remove('active');
-      isAnimating = false;
-    }, 400);
-  }
-});
+            // Animate mit CSS Variables
+            root.style.setProperty('--btn-scale', '0.85');
+            root.style.setProperty('--btn-bg', '#ff4444');
+            root.style.setProperty('--btn-shadow', '0 6px 20px rgba(255,68,68,0.5)');
+            root.style.setProperty('--btn-padding', '0');
+            root.style.setProperty('--btn-radius', '50%');
+
+            supportBtn.classList.add('active');
+
+            setTimeout(() => {
+                modal.classList.add('show');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                isAnimating = false;
+            }, 300);
+
+        } else {
+            // Schließen
+            isAnimating = true;
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+
+            setTimeout(() => {
+                root.style.setProperty('--btn-scale', '1');
+                root.style.setProperty('--btn-bg', '#7c4dff');
+                root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
+                root.style.setProperty('--btn-padding', '10px 16px');
+                root.style.setProperty('--btn-radius', '50px');
+
+                supportBtn.classList.remove('active');
+                isAnimating = false;
+            }, 400);
+        }
+    });
+
+    modal.addEventListener('click', (e) => {
+        if(e.target === modal && !isAnimating) {
+            isAnimating = true;
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+
+            setTimeout(() => {
+                root.style.setProperty('--btn-scale', '1');
+                root.style.setProperty('--btn-bg', '#7c4dff');
+                root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
+                root.style.setProperty('--btn-padding', '10px 16px');
+                root.style.setProperty('--btn-radius', '50px');
+
+                supportBtn.classList.remove('active');
+                isAnimating = false;
+            }, 400);
+        }
+    });
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('support-name').value.trim();
+        const email = document.getElementById('support-email').value.trim();
+        const subject = document.getElementById('support-subject').value.trim() || 'Support request from website';
+        const message = document.getElementById('support-message').value.trim();
+        if(!message) {
+            alert('Bitte beschreibe dein Problem!');
+            return;
+        }
+        let body = '';
+        if(name) body += 'Name: ' + name + '\n';
+        if(email) body += 'Email: ' + email + '\n';
+        body += '\n--- Message ---\n' + message + '\n\n--- End ---\n';
+        const to = 'contact@ogcraftnet.vip';
+        window.location.href = 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+        if(!isAnimating) {
+            isAnimating = true;
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+
+            setTimeout(() => {
+                root.style.setProperty('--btn-scale', '1');
+                root.style.setProperty('--btn-bg', '#7c4dff');
+                root.style.setProperty('--btn-shadow', '0 4px 12px rgba(124,77,255,0.4)');
+                root.style.setProperty('--btn-padding', '10px 16px');
+                root.style.setProperty('--btn-radius', '50px');
+
+                supportBtn.classList.remove('active');
+                isAnimating = false;
+            }, 400);
+        }
+    });
 </script>
 </body>
 </html>
