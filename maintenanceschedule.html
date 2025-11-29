@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OGCRAFTNETWORK | Maintenance Schedule</title>
+    <style>
+        :root {
+            --btn-scale: 1;
+            --btn-bg: #7c4dff;
+            --btn-shadow: 0 4px 12px rgba(124,77,255,0.4);
+            --btn-padding: 10px 16px;
+            --btn-radius: 50px;
+            --primary: #7c4dff;
+            --gold: #bfa578;
+            --bg-dark: #070202;
+            --glass-border: rgba(124, 77, 255, 0.2);
+        }
+
+        html, body {
+            margin: 0; padding: 0; width: 100vw; height: 100vh;
+            background: var(--bg-dark); color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex; flex-direction: column; min-height: 100vh;
+            background: radial-gradient(ellipse 80% 40% at 50% 15%, #442f16aa 15%, #070202 65%) no-repeat;
+        }
+
+        /* Header */
+        header { display: flex; align-items: center; padding: 10px 30px; }
+        header img.logo { height: 48px; object-fit: contain; }
+
+        /* Hero */
+        .hero {
+            position: relative; width: 100vw; min-height: 35vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+        }
+        .overlay {
+            position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse 80% 40% at 50% 30%, #1b0a02c5 35%, #070202ee 100%);
+            z-index: 1;
+        }
+        .headline {
+            position: relative; z-index: 2; font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900; color: #fff; text-shadow: 0 8px 24px #000a;
+            margin: 0 0 10px 0; text-align: center;
+        }
+        .subheadline {
+            position: relative; z-index: 2; font-size: 1.2rem; font-weight: 500;
+            color: #fff8; margin: 0; text-align: center;
+        }
+
+        /* Main */
+        main {
+            display: flex; flex-direction: column; align-items: center;
+            background: var(--bg-dark); padding: 0 20px 60px 20px; flex: 1;
+        }
+
+        .calendar-section {
+            width: 100%; max-width: 1200px; margin: -40px auto 40px;
+            position: relative; z-index: 10;
+        }
+
+        .calendar-controls {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding: 20px;
+            background: rgba(20, 15, 10, 0.6); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            user-select: none;
+        }
+        .current-month { font-size: 1.5rem; font-weight: 800; color: #fff; text-transform: capitalize; }
+        
+        .cal-nav-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+            font-weight: bold;
+        }
+        .cal-nav-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+            background: rgba(124, 77, 255, 0.1); border: 1px solid var(--glass-border);
+            border-radius: 16px; overflow: hidden; backdrop-filter: blur(20px);
+        }
+
+        .cal-day-header {
+            background: rgba(20, 15, 10, 0.8); padding: 15px; text-align: center;
+            font-weight: 700; color: var(--gold); font-size: 0.85rem;
+        }
+
+        .cal-day {
+            background: rgba(10, 7, 7, 0.7); min-height: 140px; padding: 10px;
+            position: relative; transition: background 0.2s;
+        }
+        .cal-day:hover { background: rgba(25, 20, 25, 0.8); }
+        
+        .cal-day.today { background: rgba(124, 77, 255, 0.08); }
+        .cal-day.today::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: var(--primary); box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .cal-day.other-month { opacity: 0.4; background: rgba(5, 5, 5, 0.6); }
+        .day-number { font-size: 0.9rem; color: #fff8; margin-bottom: 8px; display: block; text-align: right; }
+
+        /* Events */
+        .event {
+            display: block; padding: 4px 6px; border-radius: 4px; margin-bottom: 4px;
+            font-size: 0.7rem; font-weight: 600; border-left: 3px solid;
+            cursor: default; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .event-time { opacity: 0.7; margin-right: 4px; font-size: 0.9em; }
+
+        .type-standard { background: rgba(124, 77, 255, 0.15); border-color: #7c4dff; color: #d7c9ff; }
+        .type-premium { background: rgba(255, 183, 77, 0.15); border-color: #ffb74d; color: #ffcc80; }
+        .type-critical { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ffcdd2; }
+        .type-beta { background: rgba(46, 204, 113, 0.15); border-color: #2ecc71; color: #a8e6cf; }
+
+        /* Footer & Support */
+        .site-footer {
+            width: 100%; padding: 32px 20px; background: rgba(20, 15, 10, 0.4);
+            border-top: 1px solid var(--glass-border); display: flex; justify-content: center; margin-top: auto;
+        }
+        .footer-inner { width: 100%; max-width: 1200px; text-align: center; }
+        .social-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 10px; }
+        .social-link {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px;
+            text-decoration: none; color: #fff; background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s ease;
+        }
+        .social-link:hover { transform: translateY(-2px); background: rgba(124, 77, 255, 0.12); border-color: rgba(124, 77, 255, 0.4); }
+        .social-link img { width: 18px; height: 18px; }
+        .credits { color: var(--gold); font-size: 0.95rem; }
+
+        /* Support Button */
+        #support-btn-container { position: fixed; right: 20px; bottom: 20px; z-index: 10001; }
+        #support-btn {
+            background: var(--btn-bg); border: none; color: #fff; padding: var(--btn-padding);
+            border-radius: var(--btn-radius); box-shadow: var(--btn-shadow); cursor: pointer;
+            font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+            min-width: 48px; min-height: 48px; transform: scale(var(--btn-scale)); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #support-btn:hover:not(.active) { transform: scale(1.08); box-shadow: 0 6px 20px rgba(124,77,255,0.6); }
+        #support-btn .btn-text { transition: opacity 0.3s ease; }
+        #support-btn.active .btn-text { opacity: 0; display: none; }
+        #support-btn .close-icon { display: none; font-size: 1.3rem; }
+        #support-btn.active .close-icon { display: block; }
+        #support-btn .close-icon::before { content: "\2715"; }
+
+        /* Modal */
+        #support-modal {
+            position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0);
+            z-index: 10000; display: flex; justify-content: flex-end; align-items: flex-end;
+            pointer-events: none; transition: background 0.4s ease;
+        }
+        #support-modal.show { pointer-events: auto; background: rgba(0,0,0,0.65); }
+        #support-modal-content {
+            background: #0a0707; padding: 20px; border-radius: 12px; border: 1px solid rgba(124,77,255,0.2);
+            width: 90%; max-width: 420px; margin: 0 20px 90px 20px; opacity: 0;
+            transform: scale(0.85) translateY(20px); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #support-modal.show #support-modal-content { opacity: 1; transform: scale(1) translateY(0); }
+        input, textarea { background: #070202; color: #fff; border: 1px solid rgba(255,255,255,0.06); outline: none; }
+        
+        @media (max-width: 768px) {
+            .calendar-grid { grid-template-columns: 1fr; gap: 10px; background: transparent; border: none; }
+            .cal-day-header { display: none; }
+            .cal-day { border-radius: 12px; border: 1px solid var(--glass-border); min-height: auto; }
+            .day-number { text-align: left; margin-bottom: 10px; color: var(--gold); }
+            .day-number::before { content: "Date: "; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img class="logo" src="https://i.ibb.co/TxrxHgzK/logo-long.png" alt="OGCRAFTNETWORK Logo">
+    </header>
+
+    <section class="hero">
+        <div class="overlay"></div>
+        <h1 class="headline">Maintenance Schedule</h1>
+        <h2 class="subheadline">Current Operations & Node Status</h2>
+    </section>
+
+    <main>
+        <section class="calendar-section">
+            <div class="calendar-controls">
+                <button id="prevMonth" class="cal-nav-btn">&lt;</button>
+                <span id="monthDisplay" class="current-month">Loading...</span>
+                <button id="nextMonth" class="cal-nav-btn">&gt;</button>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="social-links">
+                <a class="social-link" href="https://tiktok.com/@ogcraftnet" target="_blank"><img src="https://cdn.simpleicons.org/tiktok/FFFFFF"></a>
+                <a class="social-link" href="https://discord.ogcraftnet.vip" target="_blank"><img src="https://cdn.simpleicons.org/discord/FFFFFF"></a>
+                <a class="social-link" href="https://www.youtube.com/@OGCRAFTNETSTUDIOS" target="_blank"><img src="https://cdn.simpleicons.org/youtube/FFFFFF"></a>
+                <a class="social-link" href="https://www.curseforge.com/members/ogcraftnetstudiosaustria" target="_blank"><img src="https://cdn.simpleicons.org/curseforge/FFFFFF"></a>
+            </div>
+            <div class="credits">© by OGCRAFTNET STUDIOS</div>
+        </div>
+    </footer>
+
+    <div id="support-btn-container">
+        <button id="support-btn"><span class="btn-text">Support</span><span class="close-icon"></span></button>
+    </div>
+
+    <div id="support-modal">
+        <div id="support-modal-content">
+            <h3 style="margin:0 0 12px 0;">Support Request</h3>
+            <p style="color:#d7c9ff;margin:0 0 12px 0;font-size:0.9rem;">Send us an email directly.</p>
+            <form id="support-form">
+                <div style="display:flex;gap:8px;margin-bottom:8px;">
+                    <input id="support-name" placeholder="Name" style="flex:1;padding:10px;border-radius:8px;">
+                    <input id="support-email" type="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;">
+                </div>
+                <input id="support-subject" placeholder="Subject" style="width:100%;padding:10px;border-radius:8px;margin-bottom:8px;box-sizing:border-box;">
+                <textarea id="support-message" placeholder="Message" rows="5" style="width:100%;padding:10px;border-radius:8px;margin-bottom:10px;resize:vertical;box-sizing:border-box;"></textarea>
+                <button type="submit" style="background:#27a844;border:none;padding:10px;border-radius:8px;color:#fff;font-weight:700;width:100%;cursor:pointer;">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- CALENDAR LOGIC ---
+        let nav = 0; // Month offset
+        const calendar = document.getElementById('calendarGrid');
+        const monthDisplay = document.getElementById('monthDisplay');
+        
+        const minDate = new Date('2025-01-01');
+        const maxDate = new Date('2028-12-31');
+
+        // SPECIAL EVENT DATE
+        const OPEN_BETA_DATE = new Date('2026-09-18T18:00:00');
+
+        function getEventsForDate(year, month, day) {
+            const events = [];
+            const dateObj = new Date(year, month, day);
+            
+            // 1. THE BIG ONE: OPEN BETA LAUNCH
+            if (year === 2026 && month === 8 && day === 18) { // Month 8 = September
+                events.push({
+                    time: "18:00",
+                    title: "OPEN BETA LAUNCH",
+                    type: "beta" // Special Green Color
+                });
+            }
+
+            // 2. RECURRING EVENTS (Every 28th)
+            if (day === 28) {
+                // Check if date is BEFORE Open Beta Launch (Closed Beta Phase)
+                if (dateObj < OPEN_BETA_DATE) {
+                    events.push({
+                        time: "01:00",
+                        title: "EU Nodes Reboot (1h)",
+                        type: "standard"
+                    });
+                } 
+                // Check if date is AFTER Open Beta Launch (Open Beta Phase)
+                else {
+                    events.push({
+                        time: "00:00",
+                        title: "Shop Reboot (20m)",
+                        type: "critical"
+                    });
+                }
+            }
+
+            return events;
+        }
+
+        function load() {
+            const dt = new Date();
+            if (nav !== 0) dt.setMonth(new Date().getMonth() + nav);
+
+            // Limits
+            if (dt.getFullYear() > 2028) { nav--; return; }
+            if (dt.getFullYear() < 2025) { nav++; return; }
+
+            const day = dt.getDate();
+            const month = dt.getMonth();
+            const year = dt.getFullYear();
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const dateString = firstDayOfMonth.toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric',
+            });
+            
+            // Correct padding for Monday start
+            let paddingDays = firstDayOfMonth.getDay() - 1;
+            if(paddingDays === -1) paddingDays = 6;
+
+            monthDisplay.innerText = `${dt.toLocaleDateString('en-US', { month: 'long' })} ${year}`;
+            calendar.innerHTML = '';
+
+            // Headers
+            const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            if(window.innerWidth > 768) {
+                weekdays.forEach(wd => {
+                    const headerDiv = document.createElement('div');
+                    headerDiv.classList.add('cal-day-header');
+                    headerDiv.innerText = wd;
+                    calendar.appendChild(headerDiv);
+                });
+            }
+
+            // Padding Days
+            for(let i = 0; i < paddingDays; i++) {
+                const daySquare = document.createElement('div');
+                daySquare.classList.add('cal-day', 'other-month');
+                calendar.appendChild(daySquare);
+            }
+
+            // Actual Days
+            for(let i = 1; i <= daysInMonth; i++) {
+                const daySquare = document.createElement('div');
+                daySquare.classList.add('cal-day');
+
+                // Check Today
+                const todayObj = new Date();
+                if (i === todayObj.getDate() && month === todayObj.getMonth() && year === todayObj.getFullYear()) {
+                    daySquare.classList.add('today');
+                }
+
+                const dayNum = document.createElement('span');
+                dayNum.classList.add('day-number');
+                dayNum.innerText = i;
+                daySquare.appendChild(dayNum);
+
+                // GET DYNAMIC EVENTS
+                const dailyEvents = getEventsForDate(year, month, i);
+                dailyEvents.forEach(evt => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.classList.add('event', `type-${evt.type}`);
+                    eventDiv.innerHTML = `<span class="event-time">${evt.time}</span> ${evt.title}`;
+                    daySquare.appendChild(eventDiv);
+                });
+
+                calendar.appendChild(daySquare);
+            }
+        }
+
+        function initButtons() {
+            document.getElementById('nextMonth').addEventListener('click', () => { nav++; load(); });
+            document.getElementById('prevMonth').addEventListener('click', () => { nav--; load(); });
+        }
+
+        initButtons();
+        load();
+
+        // --- SUPPORT MODAL LOGIC ---
+        const supportBtn = document.getElementById('support-btn');
+        const modal = document.getElementById('support-modal');
+        const root = document.documentElement;
+        let isAnimating = false;
+
+        supportBtn.addEventListener('click', () => {
+            if(isAnimating) return;
+            if(!modal.classList.contains('show')) {
+                isAnimating = true;
+                root.style.setProperty('--btn-scale', '0.85');
+                root.style.setProperty('--btn-bg', '#ff4444');
+                root.style.setProperty('--btn-radius', '50%');
+                root.style.setProperty('--btn-padding', '0');
+                supportBtn.classList.add('active');
+                setTimeout(() => {
+                    modal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                    isAnimating = false;
+                }, 300);
+            } else {
+                closeModal();
+            }
+        });
+
+        function closeModal() {
+            if(isAnimating) return;
+            isAnimating = true;
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                root.style.setProperty('--btn-scale', '1');
+                root.style.setProperty('--btn-bg', '#7c4dff');
+                root.style.setProperty('--btn-radius', '50px');
+                root.style.setProperty('--btn-padding', '10px 16px');
+                supportBtn.classList.remove('active');
+                isAnimating = false;
+            }, 400);
+        }
+
+        modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+        document.getElementById('support-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const subject = document.getElementById('support-subject').value;
+            const msg = document.getElementById('support-message').value;
+            window.location.href = `mailto:contact@ogcraftnet.vip?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
+            closeModal();
+        });
+    </script>
+</body>
+</html>
